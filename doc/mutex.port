@@ -1,0 +1,26 @@
+//前后端接口文档
+
+//登录
+{
+    url: '/api/login'
+    param: {
+        account: string
+        pwd: string
+    }
+    return: {
+        state: int
+    }
+}
+
+
+//注册
+{
+    url: '/api/register'
+    param: {
+        account: string
+        pwd: string
+        ...: ...
+    }
+}
+
+
