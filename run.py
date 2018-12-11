@@ -23,8 +23,8 @@ def catch_all(path):
 	return render_template("index.html")
 
 
-app.add_url_rule('/api/login', view_func=ServerFacade.login, methods=['POST'])
-app.add_url_rule('/api/register', view_func=ServerFacade.register, methods=['POST'])
+app.add_url_rule('/api/login', view_func=ServerFacade.post_login, methods=['POST'])
+#app.add_url_rule('/api/register', view_func=ServerFacade.register, methods=['POST'])
 
 
 if __name__ =="__main__":

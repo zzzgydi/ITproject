@@ -1,5 +1,10 @@
 # -*- coding=utf-8 -*-
 
+from server.management.UserManagement import UserManagement
 
-from server.management import *
+
+
+def post_login():
+    return UserManagement.login()
+
 

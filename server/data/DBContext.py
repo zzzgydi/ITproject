@@ -9,8 +9,8 @@
 import os
 import sqlite3
 
-DB_PATH = "../../database/mutex.db"    #Linux path
-#DB_PATH = "..\\..\\database\\mutex.db" #Windows path
+DB_PATH = "/../../database/mutex.db"    #Linux path
+#DB_PATH = "\\..\\..\\database\\mutex.db" #Windows path
 
 class DBContext():
     _current_path = os.path.dirname(__file__) + DB_PATH
