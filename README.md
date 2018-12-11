@@ -41,10 +41,14 @@
 - `requirement.txt` 后端python需要安装的库, 后续可能会添加
 
 <br>
+
 #### 项目搭建前
 
 > &emsp;
+> //安装所需的库
 > pip install -r requirement.txt
+> &emsp;
+> 在Windows下开发的时候，要注意将`/server/data/DBContext.py`这个文件的*DB_path*的路径改成Windows的。
 > &emsp;
 
 <br/>
