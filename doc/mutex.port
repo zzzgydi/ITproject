@@ -21,6 +21,9 @@
         pwd: string
         ...: ...
     }
+    return: {
+        state: int
+    }
 }
 
 
