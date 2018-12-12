@@ -57,7 +57,8 @@ class UserManagement(object):
 
     @staticmethod
     def get_info():
-        if 'userid' in session:
+        if 'userid' not in session:
+            print("session:",session)
             return jsonify({'state': State.NotLogin})
         result = UserDBmanagement.get_user_info(session['userid'])
         return jsonify(result)

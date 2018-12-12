@@ -42,3 +42,10 @@
         state: int
     }
 }
+
+
+//获取用户个人信息
+{
+    url: '/api/getuserinfo'
+    method: 'GET'
+}
