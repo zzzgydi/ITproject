@@ -105,3 +105,33 @@ class UserDBmanagement(object):
         pass
 
 
+
+#管理员登录注册
+class AdminDBmanagement(object):
+    @staticmethod
+    def admin_login(adminid, pwd):
+        _sql_admin_login = "select * from admin where adminid=? and password=?;"
+        with DBContext() as con:
+            if not con.exec(_sql_admin_login, (adminid, pwd)):
+                return {'state': State.Error}
+            return {'state': State.OK}
+        pass
+
+    @staticmethod
+    def admin_register():
+        '''
+        默认注册6个管理员
+        往后暂不提供注册功能
+        '''
+        _sql_admin_reg = "insert into admin values (?,?);"
+        _const_admin = [
+            ('gydi', 'gydi'), ('jiashuo', 'jiashuo'), ('chang', 'chang'),
+            ('wujie', 'wujie'), ('guangyun', 'guangyun'), ('shijie', 'shijie'),
+            ('test', 'test'), ('other', 'other')
+        ]
+        with DBContext() as con:
+            con.get_cursor().executemany(_sql_admin_reg, _const_admin)
+            if con.is_error():
+                return {'state': State.DBErr}
+            return {'state': State.OK}
+        pass
