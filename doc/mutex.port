@@ -30,5 +30,15 @@
 
 //修改个人信息
 {
-    
+    url: '/api/reviseinfo'
+    param: {
+        phone: string -
+        pwd: string -
+        idnumber: string -
+        name: string -
+        address: string -
+    }
+    return: {
+        state: int
+    }
 }

@@ -27,10 +27,10 @@ class UserDBmanagement(object):
                 return {'state': State.ActErr}
             if not con.exec(_sql_login, (phone, pwd)):
                 return {'state': State.DBErr}
-            res = con.get_cursor().fetchone()[0]
+            res = con.get_cursor().fetchone()
             if not res:
                 return {'state': State.PwdErr}
-            return {'state': State.OK, 'userid': res}
+            return {'state': State.OK, 'userid': res[0]}
         pass
     pass
 
@@ -76,6 +76,7 @@ class UserDBmanagement(object):
             val_list.append(address)
         if len(str_list) == 0:
             return {'state': State.Error}
+        val_list.append(userid)
         val_tuple = tuple(val_list)
         sql_str = _sql_revise_.format(''.join(str_list)[:-1])
         with DBContext() as con:
