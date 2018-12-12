@@ -4,7 +4,7 @@
 {
     url: '/api/login'
     param: {
-        account: string
+        phone: string
         pwd: string
     }
     return: {
@@ -17,9 +17,11 @@
 {
     url: '/api/register'
     param: {
-        account: string
+        phone: string
         pwd: string
-        ...: ...
+        idnumber: string
+        name: string
+        address: string
     }
     return: {
         state: int

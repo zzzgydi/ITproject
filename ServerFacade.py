@@ -26,7 +26,7 @@ def catch_all(path):
 
 
 app.add_url_rule('/api/login', view_func=UserManagement.login, methods=['POST'])
-#app.add_url_rule('/api/register', view_func=ServerFacade.register, methods=['POST'])
+app.add_url_rule('/api/register', view_func=UserManagement.register, methods=['POST'])
 
 
 if __name__ == "__main__":
