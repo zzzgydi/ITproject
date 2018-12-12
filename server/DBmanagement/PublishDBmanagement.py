@@ -2,7 +2,7 @@
 import os
 import sys
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
-from server.data.DBcontext import DBContext
+from server.data.DBContext import DBContext
 
 class PublishDBManagement:
     def __init__(self):
