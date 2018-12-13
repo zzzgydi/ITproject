@@ -2,25 +2,68 @@ import os
 import sys
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from server.DBmanagement.OrderDBmanagement import OrderDBmanagement
+from flask import session, request, jsonify
+from server.mutex.State import State
+import json
 
-class OrderManagement:
-    odbm = 0
 
-    def __init__(self):
-        self.odbm = OrderDBmanagement()
+class OrderManagement(object):
+    @staticmethod
+    def purchaseBook():
+        #if 'userid' not in session:
+        #    return jsonify({'state': State.NotLogin})
+        try:
+            reqdata = json.loads(request.data)
+            buyerid = reqdata['buyerid']
+            bookid = reqdata['bookid']
+            number = reqdata['number']
+        except:
+            return jsonify({'state': State.FormErr})
+        result = OrderDBmanagement.addNewOrder(buyerid, bookid, number)
+        if result['state'] != State.OK:
+            return jsonify({'state': result['state']})
+        return jsonify(result)
 
-    def purchaseBook(self, buyerid, bookid, number):
-        orderid = self.odbm.addNewOrder(buyerid, bookid, number)
-        return orderid
+    @staticmethod
+    def viewOrders():
+        #if 'userid' not in session:
+            #return jsonify({'state': State.NotLogin})
+        try:
+            reqdata = json.loads(request.data)
+            userid = reqdata['userid']
+            buyerornot = reqdata['buyerornot']
+        except:
+            return jsonify({'state': State.FormErr})
+        result = OrderDBmanagement.viewOrders(userid, buyerornot)
+        if result['state'] != State.OK:
+                return jsonify({'state': result['state']})
+        return jsonify(result)
 
-    def viewOrders(self, userid):
-        orders = self.odbm.viewOrders(userid)
-        return orders
+    @staticmethod
+    def viewOrderDetail():
+        #if 'userid' not in session:
+            #return jsonify({'state': State.NotLogin})
+        try:
+            reqdata = json.loads(request.data)
+            orderid = reqdata['orderid']
+            buyerornot = reqdata['buyerornot']
+        except:
+            return jsonify({'state': State.FormErr})
+        result = OrderDBmanagement.viewOrderDetail(orderid, buyerornot)
+        if result['state'] != State.OK:
+            return jsonify({'state': result['state']})
+        return jsonify(result)
 
-    def viewOrderDetail(self, orderid):
-        orderDetail = self.odbm.viewOrderDetail(orderid)
-        return orderDetail
+    @staticmethod
+    def changeOrderState():
+        #if 'userid' not in session:
+            #return jsonify({'state': State.NotLogin})
+        try:
+            reqdata = json.loads(request.data)
+            orderid = reqdata['orderid']
+            bookstate = reqdata['bookstate']
+        except:
+            return jsonify({'bookstate': State.FormErr})
+        result = OrderDBmanagement.changeOrderState(orderid, bookstate)
+        return jsonify(result)
 
-    def changeOrderState(self, orderid, state):
-        boolean = self.odbm.changeOrderState(orderid, state)
-        return boolean
