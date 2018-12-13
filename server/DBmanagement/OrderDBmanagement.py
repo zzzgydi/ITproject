@@ -3,70 +3,132 @@ import os
 import sys
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from server.data.DBContext import DBContext
+from server.mutex.State import State
+from server.mutex import Tools
 import time
 
 
-class OrderDBmanagement:
-    def __init__(self):
-        pass
-
-    def addNewOrder(self, buyerid, bookid, number):
-        t = time.time()
-        t = int(round(t * 1000))  # 毫秒级时间戳
-        orderid = buyerid + str(t)
-        state = "待付款"
+class OrderDBmanagement(object):
+    @staticmethod
+    def addNewOrder(buyerid, bookid, number):
+        ts = time.time()
+        ts = int(ts)  # 秒级时间戳
+        dt = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(ts))
+        orderid = buyerid + 'A' + str(ts)
+        state = "未完成"
         with DBContext() as context:
             for i in range(len(bookid)):
-                context.exec("SELECT price from book where bookid=?", (bookid[i], ))
+                if not context.exec("SELECT price from book where bookid=?", (bookid[i], )):
+                    return {'state': State.DBErr}
                 result = context.get_cursor().fetchone()[0]
-                print("书的单价为", result)
-                total = int(number[i])*result
-                context.exec("INSERT INTO orders values(?,?,?,?,?,?)", (bookid[i], orderid, t, number, total, state))
-                result = context.get_cursor().fetchone()
-                print("将订单写入数据库Orders", result)
-                context.exec("SELECT userid from user_book_publish where bookid=?", (bookid[i], ))
+                if not result:
+                    return {'state': State.NoBookErr}
+                total = result
+                if not context.exec("INSERT INTO orders values(?,?,?,?,?,?)", (bookid[i], orderid, dt, number, total, state)):
+                    return {'state': State.DBErr}
+                if not context.exec("SELECT userid from user_book_publish where bookid=?", (bookid[i], )):
+                    return {'state': State.DBErr}
                 result = context.get_cursor().fetchone()[0]
-                print("当前书的发布者id是", result)
-                context.exec("INSERT INTO user_order values(?,?,?,?)", (bookid[i], orderid, buyerid, result))
-                result = context.get_cursor().fetchone()
-                print("将订单写入数据库User_Order", result)
-        return orderid
+                if not result:
+                    return {'state': State.NoBookErr}
+                if not context.exec("INSERT INTO user_order values(?,?,?,?)", (bookid[i], orderid, buyerid, result)):
+                    return {'state': State.DBErr}
+        return {'orderid': orderid, 'state': State.OK}
 
-    def viewOrders(self, userid):
-        temp = []
+    @staticmethod
+    def viewOrders(userid, buyerornot):
+        orderidlist = ""
+        timelist = ""
+        bookstatelist = ""
+        namelist = ""
         with DBContext() as context:
-            context.exec("SELECT orderid from user_order where buyerid=? ", (userid, ))
-            result = context.get_cursor().fetchall()
+            if buyerornot == "True":
+                if not context.exec("SELECT orderid from user_order where buyerid=? ", (userid, )):
+                    return {'state': State.DBErr}
+                result = context.get_cursor().fetchall()
+                if not result:
+                    return {'state': State.OUErr}
+            else:
+                if not context.exec("SELECT orderid from user_order where sellerid=? ", (userid, )):
+                    return {'state': State.DBErr}
+                result = context.get_cursor().fetchall()
+                if not result:
+                    return {'state': State.OUErr}
             for i in range(len(result)):
-                # context.exec("SELECT * from orders where orderid=? ", (result[i][0],))
-                temp[i] = result[i][0]  # 订单号数组
-        return temp
+                if not context.exec("SELECT * from orders where orderid=? ", (result[i][0],)):
+                    return {'state': State.DBErr}
+                orderdetail = context.get_cursor().fetchone()
+                if not orderdetail:
+                    return {'state': State.NoOrderErr}
+                bookid = orderdetail[0]
+                time = orderdetail[2]
+                state = orderdetail[5]
+                if not context.exec("SELECT name from book where bookid=? ", (bookid,)):
+                    return {'state': State.DBErr}
+                bookname = context.get_cursor().fetchone()[0]
+                if not bookname:
+                    return {'state': State.NoBookErr}
+                orderidlist = orderidlist + result[i][0] + ",,,"
+                timelist = timelist + time + ",,,"
+                bookstatelist = bookstatelist + state + ",,,"
+                namelist = namelist + bookname + ",,,"
+        return {'state': State.OK, 'orderid': orderidlist, 'time': timelist, 'bookstate': bookstatelist, 'name': namelist}
 
-    def viewOrderDetail(self, orderid):
-        #temp = []
+    @staticmethod
+    def viewOrderDetail(orderid, buyerornot):
         with DBContext() as context:
-            context.exec("SELECT * from orders where orderid=? ", (orderid, ))  # 一个订单可能包含多本书
-            result = context.get_cursor().fetchall()  # 订单详情
-            #for i in range(len(result)):
-                #temp[i] = result[i]
-        #return {'bookid': result[0], 'orderid': orderid, 'time': result[2], 'number': result[3], 'total': result[4],
-                #'state': result[5]}
-        return result
-
-    def changeOrderState(self, orderid, state):
-        with DBContext() as context:
-            context.exec("SELECT * FROM orders where orderid=?", (orderid,))
+            if not context.exec("SELECT * from orders where orderid=? ", (orderid, )):
+                return {'state': State.DBErr}
             result = context.get_cursor().fetchone()
-            context.exec("UPDATE orders set state=? where orderid=? ", (state, orderid))
-        if not result:
-            boolean = False
-        else:
-            boolean = True
-        print("是否存在订单", boolean)
-        return boolean
+            if not result:
+                return {'state': State.NoOrderErr}
+            if not context.exec("SELECT name from book where bookid=? ", (result[0], )):
+                return {'state': State.DBErr}
+            bookname = context.get_cursor().fetchone()[0]
+            if not bookname:
+                return {'state': State.NoBookErr}
+            if buyerornot == "True":
+                if not context.exec("SELECT sellerid from user_order where orderid=? ", (orderid, )):
+                    return {'state': State.DBErr}
+                userid = context.get_cursor().fetchone()[0]
+                if not userid:
+                    return {'state': State.NoOrderErr}
+                if not context.exec("SELECT * from user where userid=? ", (userid, )):
+                    return {'state': State.DBErr}
+                temp = context.get_cursor().fetchone()
+                if not temp:
+                    return {'state': State.ActErr}
+                useraddress = temp[2]
+                username = temp[5]
+                userphone = temp[3]
+            else:
+                if not context.exec("SELECT buyerid from user_order where orderid=? ", (orderid,)):
+                    return {'state': State.DBErr}
+                userid = context.get_cursor().fetchone()[0]
+                if not userid:
+                    return {'state': State.NoOrderErr}
+                if not context.exec("SELECT * from user_order where userid=? ", (userid,)):
+                    return {'state': State.DBErr}
+                temp = context.get_cursor().fetchone()
+                if not temp:
+                    return {'state': State.ActErr}
+                useraddress = temp[2]
+                username = temp[5]
+                userphone = temp[3]
+        return {'state': State.OK, 'bookname': bookname, 'orderid': orderid, 'time': result[2], 'number': result[3], 'total': result[4],
+                'bookstate': result[5], 'username': username, 'userphone': userphone, 'useraddress': useraddress}
 
-if __name__ == '__main__':
-    pass
+    @staticmethod
+    def changeOrderState(orderid, bookstate):
+        with DBContext() as context:
+            if not context.exec("SELECT * FROM orders where orderid=?", (orderid,)):
+                return {'state': State.DBErr}
+            if not context.exec("UPDATE orders set state=? where orderid=? ", (bookstate, orderid)):
+                return {'state': State.DBErr}
+        return {'state': State.OK}
+
+#if __name__ == '__main__':
+    #pass
     #with DBContext() as context:
         #context.exec("INSERT INTO user_order values(?,?,?,?)", ("BOOK1", "ORDER1", "BUYERID", "SELLERID"))
         #context.exec("INSERT INTO user_order values(?,?,?,?)", ("BOOK2", "ORDER2", "BUYERID", "SELLERID"))

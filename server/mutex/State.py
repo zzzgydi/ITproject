@@ -11,3 +11,6 @@ class State(IntEnum):
     FormErr     = 300
     Error       = 400
     NotLogin    = 401
+    NoBookErr   = 201
+    NoOrderErr  = 202
+    OUErr       = 203

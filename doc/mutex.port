@@ -63,3 +63,68 @@
         state: int
     }
 }
+
+
+//添加订单
+{
+    url: '/api/addorder'
+    param: {
+        buyerid: string
+        bookid: string
+        number: int
+    }
+    return: {
+        state: int
+        orderid: string
+    }
+}
+
+//查看订单
+{
+    url: '/api/orders'
+    param: {
+        userid: string
+        buyerornot: string
+    }
+    return: {
+        state: int
+        orderlist: [{
+            state: int
+            orderid: string
+            time: string
+            bookstate: string
+            name: string
+        }]
+    }
+}
+//订单详情
+{
+    url: '/api/orderdetail'
+    param: {
+        orderid: string
+        buyerornot: string
+    }
+    return: {
+        state: int
+        bookname: string
+        orderid: string
+        time: string
+        number: int
+        total: double
+        bookstate: string
+        username: string
+        userphone: string
+        useraddress: string
+    }
+}
+//改变订单状态
+{
+    url: '/api/changestate'
+    param: {
+        orderid: string
+        bookstate: string
+    }
+    return: {
+        state: int
+    }
+}
