@@ -2,7 +2,7 @@
 
 from flask import session, request, jsonify
 from server.mutex.State import State
-from server.DBmanagement.UserDBmanagement import UserDBmanagement,AdminDBmanagement
+from server.DBmanagement.UserDBmanagement import UserDBmanagement
 import json
 
 
@@ -62,20 +62,5 @@ class UserManagement(object):
             print("session:", session)
             return jsonify({'state': State.NotLogin})
         result = UserDBmanagement.get_user_info(session['userid'])
-        return jsonify(result)
-
-
-class AdminManagement(object):
-    @staticmethod
-    def admin_login():
-        try:
-            reqdata = json.loads(request.data)
-            adminid = reqdata['adminid']
-            pwd = reqdata['pwd']
-        except:
-            return jsonify({'state': State.FormErr})
-        result = AdminDBmanagement.admin_login(adminid, pwd)
-        if result and result['state'] == State.OK:
-            session['adminid'] = adminid
         return jsonify(result)
 

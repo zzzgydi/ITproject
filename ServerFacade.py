@@ -5,8 +5,8 @@ import os
 from flask import Flask, render_template, jsonify, url_for
 from flask import request, redirect, make_response
 from datetime import timedelta
-from server.management.UserManagement import UserManagement, AdminManagement
-
+from server.management.UserManagement import UserManagement
+from server.management.AdminManagement import AdminManagement
 
 app = Flask(__name__,
             static_folder="./client/static",
@@ -31,5 +31,9 @@ app.add_url_rule('/api/reviseinfo', view_func=UserManagement.revise_info, method
 app.add_url_rule('/api/getuserinfo', view_func=UserManagement.get_info)
 app.add_url_rule('/admin/api/login', view_func=AdminManagement.admin_login, methods=['POST'])
 
+
+
 if __name__ == "__main__":
     app.run(debug=False)
+
+
