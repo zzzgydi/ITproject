@@ -30,11 +30,12 @@ class OrderManagement(object):
             #return jsonify({'state': State.NotLogin})
         try:
             reqdata = json.loads(request.data)
-            userid = reqdata['userid']
+            userid = reqdata['userid'] #session['userid']
             buyerornot = reqdata['buyerornot']
         except:
             return jsonify({'state': State.FormErr})
-        result = OrderDBmanagement.viewOrders(userid, buyerornot)
+        #result = OrderDBmanagement.viewOrders(userid, buyerornot)
+        result = OrderDBmanagement.view_orders(userid, buyerornot)
         if result['state'] != State.OK:
                 return jsonify({'state': result['state']})
         return jsonify(result)

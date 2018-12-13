@@ -51,7 +51,6 @@
 }
 
 
-
 //管理员登录
 {
     url: '/admin/api/login'
@@ -79,6 +78,7 @@
     }
 }
 
+
 //查看订单
 {
     url: '/api/orders'
@@ -89,14 +89,30 @@
     return: {
         state: int
         orderlist: [{
-            state: int
             orderid: string
             time: string
             bookstate: string
             name: string
         }]
     }
+    //修改
+    return: {
+        state: int
+        orderlist:[{
+            bookid: string
+            orderid: string
+            time: string
+            total: 总价格
+            state: 订单状态
+            name: 书名
+            picture: 书的图片地址
+            author: 作者
+            class: 书的分类
+        }]
+    }
 }
+
+
 //订单详情
 {
     url: '/api/orderdetail'
@@ -117,6 +133,8 @@
         useraddress: string
     }
 }
+
+
 //改变订单状态
 {
     url: '/api/changestate'

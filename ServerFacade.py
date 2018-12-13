@@ -25,16 +25,22 @@ app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=7)  # 设置session的
 def catch_all(path):
     return render_template("index.html")
 
-
+#gydi
 app.add_url_rule('/api/login', view_func=UserManagement.login, methods=['POST'])
 app.add_url_rule('/api/register', view_func=UserManagement.register, methods=['POST'])
 app.add_url_rule('/api/reviseinfo', view_func=UserManagement.revise_info, methods=['POST'])
 app.add_url_rule('/api/getuserinfo', view_func=UserManagement.get_info)
 app.add_url_rule('/admin/api/login', view_func=AdminManagement.admin_login, methods=['POST'])
+
+#武杰
 app.add_url_rule('/api/addorder', view_func=OrderManagement.purchaseBook, methods=['POST'])
-app.add_url_rule('/api/orders', view_func=OrderManagement.viewOrders)
+app.add_url_rule('/api/orders', view_func=OrderManagement.viewOrders, methods=['POST'])
 app.add_url_rule('/api/orderdetail', view_func=OrderManagement.viewOrderDetail)
 app.add_url_rule('/api/changestate', view_func=OrderManagement.changeOrderState, methods=['POST'])
+
+#光云
+#世杰
+
 
 
 
