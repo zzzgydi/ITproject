@@ -1,0 +1,67 @@
+pragma foreign_keys=off;
+begin transaction;
+create table user(
+userid varchar(32) primary key not null,
+password varchar(64) not null,
+address varchar(512) not null,
+phone varchar(32) not null,
+idnumber varchar(64) not null,
+name varchar(16) not null
+);
+create table admin(
+adminid varchar(16) primary key not null,
+password varchar(64) not null
+);
+create table book(
+bookid varchar(128) primary key not null,
+name varchar(128) not null,
+price numeric(16,4) not null,
+detail varchar(2048),
+isbn varchar(64),
+number varchar(16) not null,
+picture varchar(256),
+state varchar(16) not null,
+author varchar(64),
+class varchar(32)
+);
+create table orders(
+bookid varchar(128) not null,
+orderid varchar(256) not null,
+time varchar(32) not null,
+number varchar(16) not null,
+total numeric(16,4) not null,
+state varchar(16) not null,
+primary key(bookid,orderid)
+);
+create table user_admin(
+userid varchar(32) primary key not null,
+adminid varchar(16) not null,
+foreign key(adminid) references admin(adminid));
+create table book_admin(
+bookid varchar(128) primary key not null,
+adminid varchar(16) not null,
+foreign key(adminid) references admin(adminid));
+create table user_book_lookup(
+bookid varchar(128) primary key not null,
+userid varchar(32) not null,
+time varchar(32) not null,
+foreign key(userid) references user(userid));
+create table user_book_collect(
+bookid varchar(128) primary key not null,
+userid varchar(32) not null,
+time varchar(32) not null,
+foreign key(userid) references user(userid));
+create table user_book_publish(
+bookid varchar(128) primary key not null,
+userid varchar(32) not null,
+time varchar(32) not null,
+foreign key(userid) references user(userid));
+create table user_order(
+bookid varchar(128) not null,
+orderid varchar(256) not null,
+buyerid varchar(32) not null,
+sellerid varchar(32) not null,
+primary key(bookid,orderid),
+foreign key(buyerid) references user(userid),
+foreign key(sellerid) references user(userid));
+commit;
