@@ -59,8 +59,19 @@ class UserManagement(object):
     @staticmethod
     def get_info():
         if 'userid' not in session:
-            print("session:", session)
             return jsonify({'state': State.NotLogin})
         result = UserDBmanagement.get_user_info(session['userid'])
         return jsonify(result)
+
+    @staticmethod
+    def get_collect():
+        if 'userid' not in session:
+            return jsonify({'state': State.NotLogin})
+        result = UserDBmanagement.get_collection(session['userid'])
+        return jsonify(result)
+    
+    @staticmethod
+    def collect_book():
+        pass
+
 

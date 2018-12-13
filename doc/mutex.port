@@ -108,6 +108,7 @@
             picture: 书的图片地址
             author: 作者
             class: 书的分类
+            phone: 卖家或买家的电话
         }]
     }
 }
@@ -146,3 +147,24 @@
         state: int
     }
 }
+
+
+//用户获取收藏列表
+{
+    url: '/api/getcollect'
+    method: GET
+    return: {
+        state: int
+        booklist: [{
+            bookid: 
+            name: 
+            price: 
+            picture:
+            state: 
+            author: 
+            class: 
+            time: 收藏时间
+        }]
+    }
+}
+

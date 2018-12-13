@@ -7,8 +7,8 @@ import os
 import sys
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
-_const_key_view_orders = ('bookid', 'orderid', 'time',
-                          'total', 'state', 'name', 'picture', 'author', 'class')
+_const_key_view_orders = ('bookid', 'orderid', 'time', 'total', 'state',
+                          'name', 'picture', 'author', 'class', 'phone')
 
 
 class OrderDBmanagement(object):
@@ -77,11 +77,10 @@ class OrderDBmanagement(object):
     #             namelist = namelist + bookname + ",,,"
     #     return {'state': State.OK, 'orderid': orderidlist, 'time': timelist, 'bookstate': bookstatelist, 'name': namelist}
 
-
     @staticmethod
     def view_orders(userid, buyerornot):
         _sql_view_template = '''
-            select bookid,orderid,time,total,orders.state,name,picture,author,class 
+            select bookid,orderid,time,total,orders.state,name,picture,author,class
             from orders join user_order using (bookid,orderid) join book using (bookid) 
             where {}=?;
         '''
