@@ -11,7 +11,14 @@ _sql_login = "select userid from user where phone=? and password=?;"
 _sql_reg = "insert into user (userid,password,phone,idnumber,name,address) values (?,?,?,?,?,?);"
 _sql_revise_ = "update user set {} where userid=?;"
 _sql_user_info = "select password,address,phone,idnumber,name from user where userid=?;"
-_key_user_info = ['password', 'address', 'phone', 'idnumber', 'name']
+_key_user_info = ('password', 'address', 'phone', 'idnumber', 'name')
+_sql_collect = '''
+    select bookid,time,name,price,picture,state,author,class
+    from user_book_collect join book using (bookid)
+    where userid=?;
+'''
+_key_collect = ('bookid', 'time', 'name', 'price',
+                'picture', 'state', 'author', 'class')
 
 
 class UserDBmanagement(object):
@@ -104,3 +111,17 @@ class UserDBmanagement(object):
             return res
         pass
 
+    @staticmethod
+    def get_collection(userid):
+        with DBContext() as con:
+            if not con.exec(_sql_collect, (userid,)):
+                return {'state': State.DBErr}
+            res = con.get_cursor().fetchall()
+            if not res:
+                return {'state': State.Error}
+            try:
+                res = Tools.list_tuple2dict(_key_collect, res)
+            except:
+                return {'state': State.Error}
+            return {'state': State.OK, 'booklist': res}
+        pass
