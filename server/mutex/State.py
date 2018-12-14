@@ -9,6 +9,7 @@ class State(IntEnum):
     ActErr      = 102
     RegErr      = 103
     FormErr     = 300
+    BookNExit   = 304
     Error       = 400
     NotLogin    = 401
     NoBookErr   = 201

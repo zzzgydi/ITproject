@@ -148,6 +148,97 @@
     }
 }
 
+//查找书籍
+{
+    url:'/api/search'
+    param: {
+        keyword: string  //查找关键字
+    }
+
+    return: {
+        state: int 
+        booklist: [{
+            bookid: string
+            name:   string
+            price:  int
+            detail: string
+            ISBN:   string
+            number: string
+            picture:string
+            state:  string
+            author: string
+            class:  string
+        }
+        ]  // 列表中的字典数目不确定，需要做一个数量判断
+    }
+}
+
+
+//查看书籍
+{
+    url: '/api/viewbook'
+    param: {
+        bookid: string
+    }
+
+    return: {
+        state: int
+        bookinfo:{
+            bookid: string
+            name:   string
+            price:  int
+            detail: string
+            ISBN:   string
+            number: string
+            picture:string
+            state:  string
+            author: string
+            class:  string
+        }
+    }
+}
+
+//收藏书籍
+{
+    url: '/api/collect'
+    param: {
+        userid: string
+        bookid: string
+    }
+
+    return: {
+        state:  int
+        sucess: bool
+    }
+}
+
+//通过书籍id获得sellerid
+{
+    url: '/api/getsellerid'
+    param: {
+        bookid: string
+    }
+
+    return: {
+        state:  int
+        userid: string
+    }
+}
+
+//改变书籍状态
+{
+    url: '/api/changestate'
+    param: {
+        userid: string
+        bookid: string
+        newstate: string
+    }
+
+    return: {
+        state: int
+        sucess: bool
+    }
+}
 
 //用户获取收藏列表
 {
@@ -216,3 +307,4 @@
         image
     }
 }
+
