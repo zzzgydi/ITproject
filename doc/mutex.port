@@ -1,6 +1,6 @@
 //前后端接口文档
 
-//登录
+//登录 -- 耀
 {
     url: '/api/login'
     param: {
@@ -13,7 +13,7 @@
 }
 
 
-//注册
+//注册 -- 耀
 {
     url: '/api/register'
     param: {
@@ -28,7 +28,7 @@
     }
 }
 
-//修改个人信息
+//修改个人信息 -- 耀
 {
     url: '/api/reviseinfo'
     param: {
@@ -44,14 +44,14 @@
 }
 
 
-//获取用户个人信息
+//获取用户个人信息  -- 耀
 {
     url: '/api/getuserinfo'
     method: 'GET'
 }
 
 
-//管理员登录
+//管理员登录 -- 耀
 {
     url: '/admin/api/login'
     param: {
@@ -64,7 +64,7 @@
 }
 
 
-//添加订单
+//添加订单 -- 武
 {
     url: '/api/addorder'
     param: {
@@ -79,7 +79,7 @@
 }
 
 
-//查看订单
+//查看订单 -- 武
 {
     url: '/api/orders'
     param: {
@@ -114,7 +114,7 @@
 }
 
 
-//订单详情
+//订单详情 -- 武
 {
     url: '/api/orderdetail'
     param: {
@@ -136,7 +136,7 @@
 }
 
 
-//改变订单状态
+//改变订单状态 -- 武
 {
     url: '/api/changestate'
     param: {
@@ -148,13 +148,12 @@
     }
 }
 
-//查找书籍
+//查找书籍 -- 云
 {
     url:'/api/search'
     param: {
         keyword: string  //查找关键字
     }
-
     return: {
         state: int 
         booklist: [{
@@ -168,13 +167,12 @@
             state:  string
             author: string
             class:  string
-        }
-        ]  // 列表中的字典数目不确定，需要做一个数量判断
+        }]  // 列表中的字典数目不确定，需要做一个数量判断
     }
 }
 
 
-//查看书籍
+//查看书籍 -- 云
 {
     url: '/api/viewbook'
     param: {
@@ -198,7 +196,7 @@
     }
 }
 
-//收藏书籍
+//收藏书籍 -- 云
 {
     url: '/api/collect'
     param: {
@@ -212,7 +210,7 @@
     }
 }
 
-//通过书籍id获得sellerid
+//通过书籍id获得sellerid -- 云
 {
     url: '/api/getsellerid'
     param: {
@@ -225,7 +223,7 @@
     }
 }
 
-//改变书籍状态
+//改变书籍状态 -- 云
 {
     url: '/api/changestate'
     param: {
@@ -240,7 +238,7 @@
     }
 }
 
-//用户获取收藏列表
+//用户获取收藏列表 -- gydi
 {
     url: '/api/getcollect'
     method: GET
@@ -260,7 +258,7 @@
 }
 
 
-//用户收集书本
+//用户收集书本 -- gydi
 {
     url: '/api/collect'
     method: POST
@@ -273,7 +271,7 @@
 }
 
 
-//用户取消收藏
+//用户取消收藏 -- gydi
 {
     url: '/api/cancelcoll'
     method: POST
@@ -286,7 +284,7 @@
 }
 
 
-//上传图片文件
+//上传图片文件 -- gydi
 {
     url: '/api/upload'
     param: {
@@ -299,7 +297,7 @@
 }
 
 
-//展示图片的方法
+//展示图片的方法 -- gydi
 {
     url: '/show/<string:picture>'
     methods: GET

@@ -9,6 +9,7 @@ from server.management.UserManagement import UserManagement
 from server.management.AdminManagement import AdminManagement
 from server.management.OrderManagement import OrderManagement
 from server.management.PublishManagement import PublishManagement
+from server.management.BookManagement import BookManagement
 
 app = Flask(__name__,
             static_folder="./client/static",
@@ -48,6 +49,12 @@ app.add_url_rule('/api/changestate', view_func=OrderManagement.changeOrderState,
 
 #发布书籍
 app.add_url_rule('/api/publish', view_func=PublishManagement.publish_book, methods=['POST'])
+
+#查找书籍
+app.add_url_rule('/api/search', view_func=BookManagement.searchBook, methods=['POST'])
+#查看书籍详情
+app.add_url_rule('/api/viewbook', view_func=BookManagement.viewBook, methods=['POST'])
+
 
 
 

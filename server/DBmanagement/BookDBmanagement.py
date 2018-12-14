@@ -6,12 +6,12 @@ from server.mutex import Tools
 import time
 import random
 
-_sql_search = "select bookid, name, price, detail, ISBN, number, picture, state, author, class from user where name=?;"
-_sql_getbook_info = "select bookid, name, price, detail, ISBN, number, picture, state, author, class from user where bookid=?;"
+_sql_search = "select bookid, name, price, detail, ISBN, number, picture, state, author, class from book where name like ?;"
+_sql_getbook_info = "select bookid, name, price, detail, ISBN, number, picture, state, author, class from book where bookid=?;"
 _sql_insert_collect = "insert into User_Book_Collect values(?, ?, ?);"
 _sql_get_sellerid = "select sellerid from user_book_publish where userid=?;"
 _sql_modify_state = "update book set state = ? where bookid = ?"
-_key_book_info = ['bookid', 'name', 'price', 'detail', 'ISBN', 'number', 'picture', 'state', 'author', 'class']
+_key_book_info = ('bookid', 'name', 'price', 'detail', 'ISBN', 'number', 'picture', 'state', 'author', 'class')
 
 
 class BookDBmanagement(object):
@@ -19,16 +19,17 @@ class BookDBmanagement(object):
     @staticmethod
     def getSearchBook(keyword):
         #通过关键字查询书籍列表
+        #构造模糊搜索
+        fuzzy = "%" + keyword + "%"
         with DBContext() as con:
-            if not con.exec(_sql_search, (keyword,)):
+            if not con.exec(_sql_search, (fuzzy,)):
                 return {'state': State.DBErr}
             tempList = con.get_cursor().fetchall()
-            res = []
-
-            for i in range(len(tempList)):
-                res.insert(len(res), Tools.tuple2dict(_key_book_info, tempList[i]))
-            return {'state': State.OK, 'booklist': res}
-        pass
+        try:
+            res = Tools.list_tuple2dict(_key_book_info, tempList)
+        except:
+            return {'state': State.Error}
+        return {'state': State.OK, 'booklist': res}
     pass
 
     @staticmethod
@@ -48,6 +49,8 @@ class BookDBmanagement(object):
             if not con.exec(_sql_getbook_info, (bookid,)):
                 return {'state': State.DBErr}
             tempList = con.get_cursor().fetchone()
+            if not tempList:
+                return {'state': State.BookNExit}
             return {'state': State.OK, 'bookinfo': Tools.tuple2dict(_key_book_info, tempList)}
         pass
     pass

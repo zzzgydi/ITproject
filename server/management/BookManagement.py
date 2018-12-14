@@ -10,26 +10,24 @@ class BookManagement(object):
 
     @staticmethod
     def searchBook():
-        if 'userid' not in session:
-            return jsonify({'state': State.NotLogin})
+        #if 'userid' not in session:
+        #   return jsonify({'state': State.NotLogin})
         try:
             reqdata = json.loads(request.data)
             keyword = reqdata['keyword']
-        except Exception as e:
-            print('Keyword Error', e)
-            return jsonify({'state': State.BookNExit})
+        except:
+            return jsonify({'state': State.FormErr})
         result = BookDBmanagement.getSearchBook(keyword)
         return jsonify(result)  # result 包含state
 
     @staticmethod
     def viewBook():
-        if 'userid' not in session:
-            return jsonify({'state': State.NotLogin})
+        #if 'userid' not in session:
+        #    return jsonify({'state': State.NotLogin})
         try:
             reqdata = json.loads(request.data)
             bookid = reqdata['bookid']
-        except Exception as e:
-            print('Login Error', e)
+        except:
             return jsonify({'state': State.FormErr})
         result = BookDBmanagement.getBookInfo(bookid)
         return jsonify(result)
@@ -40,10 +38,9 @@ class BookManagement(object):
             return jsonify({'state': State.NotLogin})
         try:
             reqdata = json.loads(request.data)
-            userid = reqdata['userid']
+            userid = session['userid']#reqdata['userid'] # userid直接从session中拿
             bookid = reqdata['bookid']
-        except Exception as e:
-            print('Login Error', e)
+        except:
             return jsonify({'state': State.FormErr})
         result = BookDBmanagement.collectBook(userid, bookid)
         return jsonify(result)
