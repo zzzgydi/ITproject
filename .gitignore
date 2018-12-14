@@ -13,3 +13,7 @@
 .vscode
 doc/Mutex文档/.~数据模型 v2.0.doc
 doc/Mutex文档/.~*
+
+database/Files/*
+!database/Files/img_404.jpg
+!database/Files/img_500.jpg

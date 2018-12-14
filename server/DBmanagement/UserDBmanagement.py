@@ -12,13 +12,15 @@ _sql_reg = "insert into user (userid,password,phone,idnumber,name,address) value
 _sql_revise_ = "update user set {} where userid=?;"
 _sql_user_info = "select password,address,phone,idnumber,name from user where userid=?;"
 _key_user_info = ('password', 'address', 'phone', 'idnumber', 'name')
-_sql_collect = '''
+_sql_view_collect = '''
     select bookid,time,name,price,picture,state,author,class
     from user_book_collect join book using (bookid)
     where userid=?;
 '''
-_key_collect = ('bookid', 'time', 'name', 'price',
-                'picture', 'state', 'author', 'class')
+_key_view_collect = ('bookid', 'time', 'name', 'price',
+                     'picture', 'state', 'author', 'class')
+_sql_collect_book = "insert into user_book_collect values (?,?,?);"
+_sql_cancel_coll = "delete from user_book_collect where userid=? and bookid=?;"
 
 
 class UserDBmanagement(object):
@@ -114,14 +116,30 @@ class UserDBmanagement(object):
     @staticmethod
     def get_collection(userid):
         with DBContext() as con:
-            if not con.exec(_sql_collect, (userid,)):
+            if not con.exec(_sql_view_collect, (userid,)):
                 return {'state': State.DBErr}
             res = con.get_cursor().fetchall()
             if not res:
                 return {'state': State.Error}
             try:
-                res = Tools.list_tuple2dict(_key_collect, res)
+                res = Tools.list_tuple2dict(_key_view_collect, res)
             except:
                 return {'state': State.Error}
             return {'state': State.OK, 'booklist': res}
+        pass
+
+    @staticmethod
+    def collect_book(userid, bookid):
+        with DBContext() as con:
+            if not con.exec(_sql_collect_book, (userid, bookid, Tools.get_current_time())):
+                return {'state': State.DBErr}
+            return {'state': State.OK}
+        pass
+
+    @staticmethod
+    def cancel_collect(userid, bookid):
+        with DBContext() as con:
+            if not con.exec(_sql_cancel_coll, (userid, bookid)):
+                return {'state': State.DBErr}
+            return {'state': State.OK}
         pass

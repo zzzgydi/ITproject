@@ -168,3 +168,51 @@
     }
 }
 
+
+//用户收集书本
+{
+    url: '/api/collect'
+    method: POST
+    param: {
+        bookid: string
+    }
+    return: {
+        state: int
+    }
+}
+
+
+//用户取消收藏
+{
+    url: '/api/cancelcoll'
+    method: POST
+    param: {
+        bookid: string
+    }
+    return: {
+        state: int
+    }
+}
+
+
+//上传图片文件
+{
+    url: '/api/upload'
+    param: {
+        file
+    }
+    return: {
+        state: int
+        picture: string
+    }
+}
+
+
+//展示图片的方法
+{
+    url: '/show/<string:picture>'
+    methods: GET
+    return: {
+        image
+    }
+}

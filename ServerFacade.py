@@ -8,6 +8,7 @@ from datetime import timedelta
 from server.management.UserManagement import UserManagement
 from server.management.AdminManagement import AdminManagement
 from server.management.OrderManagement import OrderManagement
+from server.management.PublishManagement import PublishManagement
 
 app = Flask(__name__,
             static_folder="./client/static",
@@ -30,7 +31,12 @@ app.add_url_rule('/api/login', view_func=UserManagement.login, methods=['POST'])
 app.add_url_rule('/api/register', view_func=UserManagement.register, methods=['POST'])
 app.add_url_rule('/api/reviseinfo', view_func=UserManagement.revise_info, methods=['POST'])
 app.add_url_rule('/api/getuserinfo', view_func=UserManagement.get_info)
-app.add_url_rule('/api/getcollect', view_func=AdminManagement.admin_login, methods=['POST'])
+app.add_url_rule('/api/getcollect', view_func=UserManagement.get_collect)
+app.add_url_rule('/api/collect', view_func=UserManagement.collect_book, methods=['POST'])
+app.add_url_rule('/api/cancelcoll', view_func=UserManagement.cancel_collect, methods=['POST'])
+#图片
+app.add_url_rule('/api/upload', view_func=PublishManagement.upload_file, methods=['POST'])
+app.add_url_rule('/show/<string:picture>', view_func=PublishManagement.show_picture)
 #admin
 app.add_url_rule('/admin/api/login', view_func=AdminManagement.admin_login, methods=['POST'])
 

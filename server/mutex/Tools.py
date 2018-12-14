@@ -4,6 +4,9 @@
 @Description:  这里就放一些工具函数
 '''
 
+import datetime
+
+
 #将从数据中获得的数据, 从元组变成字典
 def tuple2dict(keys, vals):
     res = dict()
@@ -14,7 +17,7 @@ def tuple2dict(keys, vals):
     return res
 
 
-#元祖列表变成字典列表
+# 元祖列表变成字典列表
 def list_tuple2dict(keys, val_list):
     ress = []
     for val in val_list:
@@ -24,3 +27,7 @@ def list_tuple2dict(keys, val_list):
         ress.append(tmp)
     return ress
 
+
+# 获取时间字符串
+def get_current_time():
+    return datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')

@@ -3,6 +3,7 @@
 from server.data.DBContext import DBContext
 from server.mutex.State import State
 from server.mutex import Tools
+from server.mutex.FileObj import FileObj
 import time
 import random
 
@@ -10,4 +11,9 @@ import random
 class PublishDBmanagement:
 
     @staticmethod
-    def 
+    def publish_book(name, price, detail, isbn, number, picture, author, bookclass):
+        pass
+
+    @staticmethod
+    def save_file():
+        pass
