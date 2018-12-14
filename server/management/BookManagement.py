@@ -19,7 +19,7 @@ class BookManagement(object):
             print('Keyword Error', e)
             return jsonify({'state': State.BookNExit})
         result = BookDBmanagement.getSearchBook(keyword)
-        return jsonify(result)  // result 包含state
+        return jsonify(result)  # result 包含state
 
     @staticmethod
     def viewBook():
@@ -34,7 +34,7 @@ class BookManagement(object):
         result = BookDBmanagement.getBookInfo(bookid)
         return jsonify(result)
 
-	@staticmethod
+    @staticmethod
     def collectBook():
         if 'userid' not in session:
             return jsonify({'state': State.NotLogin})
@@ -47,5 +47,3 @@ class BookManagement(object):
             return jsonify({'state': State.FormErr})
         result = BookDBmanagement.collectBook(userid, bookid)
         return jsonify(result)
-
-

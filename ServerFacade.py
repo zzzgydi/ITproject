@@ -34,10 +34,10 @@ app.add_url_rule('/api/getuserinfo', view_func=UserManagement.get_info)
 app.add_url_rule('/api/getcollect', view_func=UserManagement.get_collect)
 app.add_url_rule('/api/collect', view_func=UserManagement.collect_book, methods=['POST'])
 app.add_url_rule('/api/cancelcoll', view_func=UserManagement.cancel_collect, methods=['POST'])
-#图片
+#图片相关
 app.add_url_rule('/api/upload', view_func=PublishManagement.upload_file, methods=['POST'])
 app.add_url_rule('/show/<string:picture>', view_func=PublishManagement.show_picture)
-#admin
+#管理员登录
 app.add_url_rule('/admin/api/login', view_func=AdminManagement.admin_login, methods=['POST'])
 
 #武杰
@@ -46,9 +46,8 @@ app.add_url_rule('/api/orders', view_func=OrderManagement.viewOrders, methods=['
 app.add_url_rule('/api/orderdetail', view_func=OrderManagement.viewOrderDetail)
 app.add_url_rule('/api/changestate', view_func=OrderManagement.changeOrderState, methods=['POST'])
 
-#光云
-#世杰
-
+#发布书籍
+app.add_url_rule('/api/publish', view_func=PublishManagement.publish_book, methods=['POST'])
 
 
 

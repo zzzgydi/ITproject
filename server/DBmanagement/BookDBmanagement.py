@@ -26,7 +26,7 @@ class BookDBmanagement(object):
             res = []
 
             for i in range(len(tempList)):
-                res.insert(len(res), Tool.tuple2dict(_key_book_info, tempList[i]))
+                res.insert(len(res), Tools.tuple2dict(_key_book_info, tempList[i]))
             return {'state': State.OK, 'booklist': res}
         pass
     pass
@@ -48,7 +48,7 @@ class BookDBmanagement(object):
             if not con.exec(_sql_getbook_info, (bookid,)):
                 return {'state': State.DBErr}
             tempList = con.get_cursor().fetchone()
-            return {'state': State.OK, 'bookinfo': Tool.tuple2dict(_key_book_info, tempList)}
+            return {'state': State.OK, 'bookinfo': Tools.tuple2dict(_key_book_info, tempList)}
         pass
     pass
 
@@ -68,7 +68,7 @@ class BookDBmanagement(object):
     @staticmethod
     def changeBookState(userid, bookid, newstate):
         with DBContext() as con:
-            if not con.exec(_sql_modify_state, (state, bookid)):
+            if not con.exec(_sql_modify_state, (newstate, bookid)):
                 return {'state': State.DBErr, "sucess": False}
             return {'state': State.OK, 'sucess': True}
         pass
