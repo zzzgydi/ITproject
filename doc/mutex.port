@@ -146,3 +146,29 @@
         state: int
     }
 }
+
+
+//查找书籍
+{
+    url:'/api/search'
+    param: {
+        keyword: string  //查找关键字
+    }
+
+    return: {
+        state: int 
+        booklist: [{
+            bookid: string
+            name:   string
+            price:  int
+            detail: string
+            ISBN:   string
+            number: string
+            picture:string
+            state:  string
+            author: string
+            class:  string
+        }
+        ]  // 列表中的字典数目不确定，需要做一个数量判断
+    }
+}
