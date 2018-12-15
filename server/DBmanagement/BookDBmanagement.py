@@ -69,10 +69,11 @@ class BookDBmanagement(object):
     pass
 
     @staticmethod
-    def changeBookState(userid, bookid, newstate):
+    def changeBookState(bookid, newstate):
+        #更改书籍状态
         with DBContext() as con:
             if not con.exec(_sql_modify_state, (newstate, bookid)):
-                return {'state': State.DBErr, "sucess": False}
-            return {'state': State.OK, 'sucess': True}
+                return {'state': State.DBErr, "success": False}
+            return {'state': State.OK, 'success': True}
         pass
     pass

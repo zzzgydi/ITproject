@@ -228,18 +228,17 @@
     }
 }
 
-//改变书籍状态 -- 云
+//改变书籍状态 -- 云/Skitwin
 {
     url: '/api/changestate'
     param: {
-        userid: string
         bookid: string
         newstate: string
     }
 
     return: {
         state: int
-        sucess: bool
+        success: bool
     }
 }
 
@@ -348,18 +347,4 @@
     }
 }
 
-
-
-//管理员-书籍通过审核 -- Skitwin
-{
-    url: '/api/bookaudit'
-    param:{
-        adminid: string
-        bookid:  string
-        newstate:string
-    }
-    return:{
-        state: int
-    }
-}
 

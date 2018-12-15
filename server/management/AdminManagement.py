@@ -3,6 +3,7 @@
 from flask import session, request, jsonify
 from server.mutex.State import State
 from server.DBmanagement.AdminDBmanagement import AdminDBmanagement
+from server.DBmanagement.BookDBmanagement import BookDBmanagement
 import json
 
 
@@ -27,3 +28,29 @@ class AdminManagement(object):
             return jsonify({'state': State.NotLogin})
         result = AdminDBmanagement.search_unreviewed_book()
         return jsonify(result)
+
+    @staticmethod
+    def view_user():
+        # 查看用户信息
+        if 'adminid' not in session:
+            return jsonify({'state': State.NotLogin})
+        result = AdminDBmanagement.view_user()
+        return jsonify(result)
+
+    @staticmethod
+    def book_audit():
+        # 审核书籍
+        if 'adminid' not in session:
+            return jsonify({'state': State.NotLogin})
+        try:
+            reqdata = json.loads(request.data)
+            bookid = reqdata['bookid']
+            newstate = reqdata['newstate']
+            adminid = session['adminid']
+        except:
+            return jsonify({'state': State.FormErr})
+        result = BookDBmanagement.changeBookState(bookid, newstate)
+        if result and result['state'] == State.OK:
+            AdminDBmanagement.add_book_admin_table(bookid, adminid)
+        return jsonify(result)
+

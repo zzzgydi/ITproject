@@ -59,8 +59,8 @@ app.add_url_rule('/api/viewbook', view_func=BookManagement.viewBook, methods=['P
 app.add_url_rule('/api/searchunreviewedbook', view_func=AdminManagement.search_unreviewed_book, methods=['POST'])
 #管理员-查看用户
 app.add_url_rule('/api/viewuser', view_func=AdminManagement.view_user, methods=['POST'])
-#管理员-书籍通过审核
-app.add_url_rule('/api/bookaudit', view_func=AdminManagement.book_audit, methods=['POST'])
+#管理员-审核书籍
+app.add_url_rule('/api/changestate', view_func=AdminManagement.book_audit, methods=['POST'])
 
 
 
