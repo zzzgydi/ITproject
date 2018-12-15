@@ -134,7 +134,7 @@
         time: string
         number: int
         total: double
-        bookstate: string
+        orderstate: string
         username: string
         userphone: string
         useraddress: string
@@ -147,7 +147,7 @@
     url: '/api/changestate'
     param: {
         orderid: string
-        bookstate: string
+        orderstate: string
     }
     return: {
         state: int
@@ -309,6 +309,28 @@
     methods: GET
     return: {
         image
+    }
+}
+
+
+//查询未审核书籍 -- Skitwin
+{
+    url: '/api/searchunreviewedbook'
+    methods: GET
+    return:{
+        state: int
+        bookinfo:{
+            bookid: string
+            name:   string
+            price:  int
+            detail: string
+            ISBN:   string
+            number: string
+            picture:string
+            state:  string
+            author: string
+            class:  string
+        }
     }
 }
 

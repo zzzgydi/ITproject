@@ -44,7 +44,7 @@ app.add_url_rule('/admin/api/login', view_func=AdminManagement.admin_login, meth
 #武杰
 app.add_url_rule('/api/addorder', view_func=OrderManagement.purchaseBook, methods=['POST'])
 app.add_url_rule('/api/orders', view_func=OrderManagement.viewOrders, methods=['POST'])
-app.add_url_rule('/api/orderdetail', view_func=OrderManagement.viewOrderDetail)
+app.add_url_rule('/api/orderdetail', view_func=OrderManagement.viewOrderDetail, methods=['POST'])
 app.add_url_rule('/api/changestate', view_func=OrderManagement.changeOrderState, methods=['POST'])
 
 #发布书籍

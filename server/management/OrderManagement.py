@@ -10,11 +10,11 @@ import json
 class OrderManagement(object):
     @staticmethod
     def purchaseBook():
-        #if 'userid' not in session:
-        #    return jsonify({'state': State.NotLogin})
+        if 'userid' not in session:
+            return jsonify({'state': State.NotLogin})
         try:
             reqdata = json.loads(request.data)
-            buyerid = reqdata['buyerid']
+            buyerid = session['userid']
             bookid = reqdata['bookid']
             number = reqdata['number']
         except:
@@ -26,11 +26,11 @@ class OrderManagement(object):
 
     @staticmethod
     def viewOrders():
-        #if 'userid' not in session:
-            #return jsonify({'state': State.NotLogin})
+        if 'userid' not in session:
+            return jsonify({'state': State.NotLogin})
         try:
             reqdata = json.loads(request.data)
-            userid = reqdata['userid'] #session['userid']
+            userid = session['userid']
             buyerornot = reqdata['buyerornot']
         except:
             return jsonify({'state': State.FormErr})
@@ -42,8 +42,8 @@ class OrderManagement(object):
 
     @staticmethod
     def viewOrderDetail():
-        #if 'userid' not in session:
-            #return jsonify({'state': State.NotLogin})
+        if 'userid' not in session:
+            return jsonify({'state': State.NotLogin})
         try:
             reqdata = json.loads(request.data)
             orderid = reqdata['orderid']
@@ -57,14 +57,14 @@ class OrderManagement(object):
 
     @staticmethod
     def changeOrderState():
-        #if 'userid' not in session:
-            #return jsonify({'state': State.NotLogin})
+        if 'userid' not in session:
+            return jsonify({'state': State.NotLogin})
         try:
             reqdata = json.loads(request.data)
             orderid = reqdata['orderid']
-            bookstate = reqdata['bookstate']
+            orderstate = reqdata['orderstate']
         except:
-            return jsonify({'bookstate': State.FormErr})
-        result = OrderDBmanagement.changeOrderState(orderid, bookstate)
+            return jsonify({'orderstate': State.FormErr})
+        result = OrderDBmanagement.changeOrderState(orderid, orderstate)
         return jsonify(result)
 
