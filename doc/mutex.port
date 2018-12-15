@@ -313,7 +313,7 @@
     methods: GET
     return:{
         state: int
-        bookinfo:{
+        booklist:{
             bookid: string
             name:   string
             price:  int
