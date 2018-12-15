@@ -6,8 +6,6 @@ from server.DBmanagement.AdminDBmanagement import AdminDBmanagement
 import json
 
 
-
-
 class AdminManagement(object):
     @staticmethod
     def admin_login():
@@ -22,12 +20,10 @@ class AdminManagement(object):
             session['adminid'] = adminid
         return jsonify(result)
 
-
     @staticmethod
     def search_unreviewed_book():
         # 查询未审核的书
+        if 'adminid' not in session:
+            return jsonify({'state': State.NotLogin})
         result = AdminDBmanagement.search_unreviewed_book()
         return jsonify(result)
-
-
-

@@ -319,7 +319,7 @@
     methods: GET
     return:{
         state: int
-        booklist:{
+        booklist:[{
             bookid: string
             name:   string
             price:  int
@@ -330,7 +330,7 @@
             state:  string
             author: string
             class:  string
-        }
+        }]
     }
 }
 
