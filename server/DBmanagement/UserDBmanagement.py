@@ -109,6 +109,7 @@ class UserDBmanagement(object):
             res = Tools.tuple2dict(_key_user_info, res)
             if not res:
                 return {'state': State.Error}
+            res.pop('password')
             res['state'] = State.OK
             return res
         pass

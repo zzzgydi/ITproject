@@ -47,7 +47,13 @@
 //获取用户个人信息  -- 耀
 {
     url: '/api/getuserinfo'
-    method: 'GET'
+    method: 'GET',
+    return: {
+        name
+        phone
+        idnumber
+        address
+    }
 }
 
 
