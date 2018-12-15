@@ -20,22 +20,23 @@ class OrderDBmanagement(object):
         orderid = buyerid + 'A' + str(ts)
         state = "未完成"
         with DBContext() as context:
-            for i in range(len(bookid)):
-                if not context.exec("SELECT price from book where bookid=?", (bookid[i], )):
-                    return {'state': State.DBErr}
-                result = context.get_cursor().fetchone()[0]
-                if not result:
-                    return {'state': State.NoBookErr}
-                total = result
-                if not context.exec("INSERT INTO orders values(?,?,?,?,?,?)", (bookid[i], orderid, dt, number, total, state)):
-                    return {'state': State.DBErr}
-                if not context.exec("SELECT userid from user_book_publish where bookid=?", (bookid[i], )):
-                    return {'state': State.DBErr}
-                result = context.get_cursor().fetchone()[0]
-                if not result:
-                    return {'state': State.NoBookErr}
-                if not context.exec("INSERT INTO user_order values(?,?,?,?)", (bookid[i], orderid, buyerid, result)):
-                    return {'state': State.DBErr}
+            if not context.exec("SELECT price from book where bookid=?", (bookid, )):
+                return {'state': State.DBErr}
+            result = context.get_cursor().fetchone()
+            if not result:
+                return {'state': State.NoBookErr}
+            result = result[0]
+            total = result
+            if not context.exec("INSERT INTO orders values(?,?,?,?,?,?)", (bookid, orderid, dt, number, total, state)):
+                return {'state': State.DBErr}
+            if not context.exec("SELECT userid from user_book_publish where bookid=?", (bookid, )):
+                return {'state': State.DBErr}
+            result = context.get_cursor().fetchone()
+            if not result:
+                return {'state': State.NoBookErr}
+            result = result[0]
+            if not context.exec("INSERT INTO user_order values(?,?,?,?)", (bookid, orderid, buyerid, result)):
+                return {'state': State.DBErr}
         return {'orderid': orderid, 'state': State.OK}
 
     # @staticmethod
@@ -102,53 +103,42 @@ class OrderDBmanagement(object):
     @staticmethod
     def viewOrderDetail(orderid, buyerornot):
         with DBContext() as context:
-            if not context.exec("SELECT * from orders where orderid=? ", (orderid, )):
+            if not context.exec("SELECT name,time,orders.number,total,orders.state from orders join book using (bookid) where orderid=? ", (orderid, )):
                 return {'state': State.DBErr}
             result = context.get_cursor().fetchone()
             if not result:
                 return {'state': State.NoOrderErr}
-            if not context.exec("SELECT name from book where bookid=? ", (result[0], )):
-                return {'state': State.DBErr}
-            bookname = context.get_cursor().fetchone()[0]
-            if not bookname:
-                return {'state': State.NoBookErr}
+            #bookname = result[0]
             if buyerornot == "True":
-                if not context.exec("SELECT sellerid from user_order where orderid=? ", (orderid, )):
-                    return {'state': State.DBErr}
-                userid = context.get_cursor().fetchone()[0]
-                if not userid:
-                    return {'state': State.NoOrderErr}
-                if not context.exec("SELECT * from user where userid=? ", (userid, )):
+                if not context.exec("SELECT address,phone,name from user_order join user on userid=sellerid where orderid=? ", (orderid, )):
                     return {'state': State.DBErr}
                 temp = context.get_cursor().fetchone()
                 if not temp:
-                    return {'state': State.ActErr}
-                useraddress = temp[2]
-                username = temp[5]
-                userphone = temp[3]
+                    return {'state': State.NoOrderErr}
+                useraddress = temp[0]
+                username = temp[2]
+                userphone = temp[1]
             else:
-                if not context.exec("SELECT buyerid from user_order where orderid=? ", (orderid,)):
-                    return {'state': State.DBErr}
-                userid = context.get_cursor().fetchone()[0]
-                if not userid:
-                    return {'state': State.NoOrderErr}
-                if not context.exec("SELECT * from user_order where userid=? ", (userid,)):
+                if not context.exec("SELECT address,phone,name from user_order join user on userid=buyerid where orderid=? ", (orderid, )):
                     return {'state': State.DBErr}
                 temp = context.get_cursor().fetchone()
                 if not temp:
-                    return {'state': State.ActErr}
-                useraddress = temp[2]
-                username = temp[5]
-                userphone = temp[3]
-        return {'state': State.OK, 'bookname': bookname, 'orderid': orderid, 'time': result[2], 'number': result[3], 'total': result[4],
-                'bookstate': result[5], 'username': username, 'userphone': userphone, 'useraddress': useraddress}
+                    return {'state': State.NoOrderErr}
+                useraddress = temp[0]
+                username = temp[2]
+                userphone = temp[1]
+        return {'state': State.OK, 'bookname': result[0], 'orderid': orderid, 'time': result[1], 'number': result[2], 'total': result[3],
+                'orderstate': result[4], 'username': username, 'userphone': userphone, 'useraddress': useraddress}
 
     @staticmethod
-    def changeOrderState(orderid, bookstate):
+    def changeOrderState(orderid, orderstate):
         with DBContext() as context:
             if not context.exec("SELECT * FROM orders where orderid=?", (orderid,)):
                 return {'state': State.DBErr}
-            if not context.exec("UPDATE orders set state=? where orderid=? ", (bookstate, orderid)):
+            result = context.get_cursor().fetchone()
+            if not result:
+                return {'state': State.NoOrderErr}
+            if not context.exec("UPDATE orders set state=? where orderid=? ", (orderstate, orderid)):
                 return {'state': State.DBErr}
         return {'state': State.OK}
 

@@ -62,9 +62,9 @@ class OrderManagement(object):
         try:
             reqdata = json.loads(request.data)
             orderid = reqdata['orderid']
-            bookstate = reqdata['bookstate']
+            orderstate = reqdata['orderstate']
         except:
-            return jsonify({'bookstate': State.FormErr})
-        result = OrderDBmanagement.changeOrderState(orderid, bookstate)
+            return jsonify({'orderstate': State.FormErr})
+        result = OrderDBmanagement.changeOrderState(orderid, orderstate)
         return jsonify(result)
 

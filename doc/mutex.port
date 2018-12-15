@@ -128,7 +128,7 @@
         time: string
         number: int
         total: double
-        bookstate: string
+        orderstate: string
         username: string
         userphone: string
         useraddress: string
@@ -141,7 +141,7 @@
     url: '/api/changestate'
     param: {
         orderid: string
-        bookstate: string
+        orderstate: string
     }
     return: {
         state: int
