@@ -40,3 +40,8 @@ class AdminDBmanagement(object):
     def view_publish():
         pass
 
+    @staticmethod
+    def search_unreviewed_book():
+        # 查询未审核的书
+        _sql_book_state_ = "select bookid from book where state = \"待审核\""
+        with DBContext as con:

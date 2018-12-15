@@ -22,3 +22,11 @@ class AdminManagement(object):
             session['adminid'] = adminid
         return jsonify(result)
 
+
+    @staticmethod
+    def search_unreviewed_book():
+        # 查询未审核的书
+        result = AdminDBmanagement.search_unreviewed_book()
+
+
+
