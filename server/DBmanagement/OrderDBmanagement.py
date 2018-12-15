@@ -39,45 +39,6 @@ class OrderDBmanagement(object):
                 return {'state': State.DBErr}
         return {'orderid': orderid, 'state': State.OK}
 
-    # @staticmethod
-    # def viewOrders(userid, buyerornot):
-    #     orderidlist = ""
-    #     timelist = ""
-    #     bookstatelist = ""
-    #     namelist = ""
-    #     with DBContext() as context:
-    #         if buyerornot == "True":
-    #             if not context.exec("SELECT orderid from user_order where buyerid=? ", (userid, )):
-    #                 return {'state': State.DBErr}
-    #             result = context.get_cursor().fetchall()
-    #             if not result:
-    #                 return {'state': State.OUErr}
-    #         else:
-    #             if not context.exec("SELECT orderid from user_order where sellerid=? ", (userid, )):
-    #                 return {'state': State.DBErr}
-    #             result = context.get_cursor().fetchall()
-    #             if not result:
-    #                 return {'state': State.OUErr}
-    #         for i in range(len(result)):
-    #             if not context.exec("SELECT * from orders where orderid=? ", (result[i][0],)):
-    #                 return {'state': State.DBErr}
-    #             orderdetail = context.get_cursor().fetchone()
-    #             if not orderdetail:
-    #                 return {'state': State.NoOrderErr}
-    #             bookid = orderdetail[0]
-    #             time = orderdetail[2]
-    #             state = orderdetail[5]
-    #             if not context.exec("SELECT name from book where bookid=? ", (bookid,)):
-    #                 return {'state': State.DBErr}
-    #             bookname = context.get_cursor().fetchone()[0]
-    #             if not bookname:
-    #                 return {'state': State.NoBookErr}
-    #             orderidlist = orderidlist + result[i][0] + ",,,"
-    #             timelist = timelist + time + ",,,"
-    #             bookstatelist = bookstatelist + state + ",,,"
-    #             namelist = namelist + bookname + ",,,"
-    #     return {'state': State.OK, 'orderid': orderidlist, 'time': timelist, 'bookstate': bookstatelist, 'name': namelist}
-
     @staticmethod
     def view_orders(userid, buyerornot):
         _sql_view_template = '''
@@ -88,7 +49,7 @@ class OrderDBmanagement(object):
         _sql = _sql_view_template.format(
             ('buyerid' if buyerornot == 'True' else 'sellerid'))
         with DBContext() as con:
-            if not con.exec(_sql, (userid)):
+            if not con.exec(_sql, (userid,)):
                 return {'state': State.DBErr}
             result = con.get_cursor().fetchall()
             if not result:
