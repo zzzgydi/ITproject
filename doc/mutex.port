@@ -89,7 +89,6 @@
 {
     url: '/api/orders'
     param: {
-        userid: string
         buyerornot: string
     }
     return: {
