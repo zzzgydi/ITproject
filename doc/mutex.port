@@ -312,7 +312,7 @@
 }
 
 
-//查询未审核书籍 -- Skitwin
+//管理员-查看未审核书籍 -- Skitwin
 {
     url: '/api/searchunreviewedbook'
     return:{
@@ -329,6 +329,37 @@
             author: string
             class:  string
         }]
+    }
+}
+
+
+//管理员-查看用户 -- Skitwin
+{
+    url: '/api/viewuser'
+    return:{
+        state: int
+        userlist:[{
+            userid:   string
+            adress:   string
+            phone:    string
+            idnumber: string
+            name:     string
+        }]
+    }
+}
+
+
+
+//管理员-书籍通过审核 -- Skitwin
+{
+    url: '/api/bookaudit'
+    param:{
+        adminid: string
+        bookid:  string
+        newstate:string
+    }
+    return:{
+        state: int
     }
 }
 
