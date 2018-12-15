@@ -27,6 +27,7 @@ class AdminManagement(object):
     def search_unreviewed_book():
         # 查询未审核的书
         result = AdminDBmanagement.search_unreviewed_book()
+        return jsonify(result)
 
 
 

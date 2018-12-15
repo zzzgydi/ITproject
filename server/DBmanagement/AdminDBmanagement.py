@@ -4,6 +4,9 @@ from server.data.DBContext import DBContext
 from server.mutex.State import State
 from server.mutex import Tools
 
+_sql_book_state_ = "select * from book where state = \"待审核\""
+_key_book_info = ('bookid', 'name', 'price', 'detail', 'ISBN', 'number', 'picture', 'state', 'author', 'class')
+
 
 class AdminDBmanagement(object):
     @staticmethod
@@ -43,6 +46,14 @@ class AdminDBmanagement(object):
     @staticmethod
     def search_unreviewed_book():
         # 查询未审核的书
-        _sql_book_state_ = "select bookid from book where state = '待审核'"
         with DBContext as con:
-            pass
+            if not con.exec(_sql_book_state_):
+                return {'state': State.DBErr}
+            tempList = con.get_cursor().fetchall()
+        try:
+            res = Tools.list_tuple2dict(_key_book_info, tempList)
+        except:
+            return {'state':State.Error}
+        return {'state': State.OK, 'booklist': res}
+    pass
+
