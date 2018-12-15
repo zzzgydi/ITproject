@@ -53,7 +53,7 @@ class AdminDBmanagement(object):
         try:
             res = Tools.list_tuple2dict(_key_book_info, tempList)
         except:
-            return {'state':State.Error}
+            return {'state': State.Error}
         return {'state': State.OK, 'booklist': res}
     pass
 

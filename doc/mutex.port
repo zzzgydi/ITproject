@@ -315,7 +315,6 @@
 //查询未审核书籍 -- Skitwin
 {
     url: '/api/searchunreviewedbook'
-    methods: GET
     return:{
         state: int
         booklist:[{
