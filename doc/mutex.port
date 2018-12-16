@@ -49,6 +49,7 @@
     url: '/api/getuserinfo'
     method: 'GET',
     return: {
+        state
         name
         phone
         idnumber
@@ -183,7 +184,6 @@
     param: {
         bookid: string
     }
-
     return: {
         state: int
         bookinfo:{
@@ -348,3 +348,16 @@
 }
 
 
+//根据书籍分类获取书籍列表
+{
+    url: '/api/bookclass'
+    param: {
+        bookclass: string
+    }
+    return: {
+        state: int
+        booklist: [{
+
+        }]
+    }
+}

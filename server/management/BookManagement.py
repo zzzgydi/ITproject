@@ -10,7 +10,7 @@ class BookManagement(object):
 
     @staticmethod
     def searchBook():
-        #if 'userid' not in session:
+        # if 'userid' not in session:
         #   return jsonify({'state': State.NotLogin})
         try:
             reqdata = json.loads(request.data)
@@ -22,7 +22,7 @@ class BookManagement(object):
 
     @staticmethod
     def viewBook():
-        #if 'userid' not in session:
+        # if 'userid' not in session:
         #    return jsonify({'state': State.NotLogin})
         try:
             reqdata = json.loads(request.data)
@@ -38,9 +38,23 @@ class BookManagement(object):
             return jsonify({'state': State.NotLogin})
         try:
             reqdata = json.loads(request.data)
-            userid = session['userid']#reqdata['userid'] # userid直接从session中拿
+            # reqdata['userid'] # userid直接从session中拿
+            userid = session['userid']
             bookid = reqdata['bookid']
         except:
             return jsonify({'state': State.FormErr})
         result = BookDBmanagement.collectBook(userid, bookid)
         return jsonify(result)
+
+    @staticmethod
+    def get_book_class():
+        # 根据书籍分类来获取书籍
+        try:
+            reqdata = json.loads(request.data)
+            bookclass = reqdata['bookclass']
+            res = BookDBmanagement.get_class_books(bookclass)
+            if res['state'] == State.FormErr:
+                res = BookDBmanagement.get_recommand(24)
+            return jsonify(res)
+        except:
+            return {'state': State.FormErr}

@@ -25,6 +25,7 @@ app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=7)  # 设置session的
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def catch_all(path):
+    print('return...')
     return render_template("index.html")
 
 #gydi
