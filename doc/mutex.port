@@ -347,6 +347,16 @@
     }
 }
 
+//下架书籍 --Skitwin
+{
+    url: '/api/soldoutbook'
+    param:{
+        bookid: string
+    }
+    return:{
+        state: int
+    }
+}
 
 //根据书籍分类获取书籍列表
 {

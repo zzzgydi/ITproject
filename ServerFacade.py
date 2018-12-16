@@ -63,6 +63,9 @@ app.add_url_rule('/api/viewuser', view_func=AdminManagement.view_user, methods=[
 #管理员-审核书籍
 app.add_url_rule('/api/changestate', view_func=AdminManagement.book_audit, methods=['POST'])
 
+#下架书籍
+app.add_url_rule('/api/soldoutbook', view_func=AdminManagement.sold_out_book, methods=['POST'])
+
 
 
 

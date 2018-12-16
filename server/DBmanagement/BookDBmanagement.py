@@ -16,6 +16,8 @@ _sql_recommand = "select bookid, name, price, detail, ISBN, number, picture, sta
 _key_book_info = ('bookid', 'name', 'price', 'detail', 'ISBN',
                   'number', 'picture', 'state', 'author', 'class')
 _book_class = ('计算机', '工程科学', '经济管理', '自然科学', '英语', '数学', '文学艺术', '政治法律', '其他')
+_sql_delete_book = "delete from book where bookid = ?"
+_key_book_info = ('bookid', 'name', 'price', 'detail', 'ISBN', 'number', 'picture', 'state', 'author', 'class')
 
 
 class BookDBmanagement(object):
@@ -119,3 +121,14 @@ class BookDBmanagement(object):
                 return {'state': State.Error}
             return {'state': State.OK, 'booklist': res}
         pass
+
+    @staticmethod
+    def sold_out_book(bookid):
+        #下架书籍
+        with DBContext() as con:
+            if not con.exec(_sql_delete_book, (bookid,)):
+                return {'state': State.DBErr}
+            return {'state': State.OK}
+        pass
+    pass
+
