@@ -8,7 +8,7 @@ _sql_unreviewed_book = "select bookid, name, price, detail, isbn, number, pictur
 _sql_reviewed_book = "select bookid, name, price, detail, isbn, number, picture, state, author, class, time from book natural join user_book_publish where state = \"待售\";"
 _sql_user_info = "select userid, address, phone, idnumber, name from user;"
 _sql_book_admin = "insert into book_admin(bookid, adminid) values (?,?);"
-_sql_check_order = ""
+_sql_check_order = "select buyerid, sellerid, book.price, book.name, order.state from user_order natural join order natural join book"
 _key_book_info = ('bookid', 'name', 'price', 'detail', 'ISBN', 'number', 'picture', 'state', 'author', 'class', 'time')
 _key_user_info = ('userid', 'address', 'phone', 'idnumber', 'name')
 

@@ -410,12 +410,8 @@
     return:{
         state: int
         orderlist:[{
-            orderid: string
-            bookid:  string
             buyerid: string
-            buyerphone: string
             sellerid: string
-            sellerphone: string
             price: int
             bookname: string
             bookstate: string
