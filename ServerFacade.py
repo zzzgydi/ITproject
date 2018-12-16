@@ -71,6 +71,9 @@ app.add_url_rule('/api/admincheckorder', view_func=AdminManagement.check_order, 
 #下架书籍
 app.add_url_rule('/api/soldoutbook', view_func=AdminManagement.sold_out_book, methods=['POST'])
 
+#用户-查看订单
+app.add_url_rule('/api/usercheckoreder', view_func=UserManagement.check_order, methods=['POST'])
+
 
 
 

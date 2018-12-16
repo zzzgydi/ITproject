@@ -21,6 +21,8 @@ _key_view_collect = ('bookid', 'time', 'name', 'price',
                      'picture', 'state', 'author', 'class')
 _sql_collect_book = "insert into user_book_collect values (?,?,?);"
 _sql_cancel_coll = "delete from user_book_collect where userid=? and bookid=?;"
+_sql_user_order = "select book.bookid, book.name, book.price, book.detail, book.isbn, book.number, book.picture, book.state, book.author, book.class from book join user_book_publish using (bookid) where user_book_publish.userid = ?;"
+_key_user_order = ('bookid', 'name', 'price', 'detail', 'isbn', 'number', 'picture', 'state', 'author', 'class')
 
 
 class UserDBmanagement(object):
@@ -143,4 +145,19 @@ class UserDBmanagement(object):
             if not con.exec(_sql_cancel_coll, (userid, bookid)):
                 return {'state': State.DBErr}
             return {'state': State.OK}
+        pass
+
+    @staticmethod
+    def check_order(userid):
+        with DBContext() as con:
+            if not con.exec(_sql_user_order, (userid,)):
+                return {'state': State.DBErr}
+            res = con.get_cursor().fetchall()
+            if not res:
+                return {'state': State.Error}
+            try:
+                res = Tools.list_tuple2dict(_key_user_order, res)
+            except:
+                return {'state': State.Error}
+            return {'state': State.OK, 'bookinfo': res}
         pass

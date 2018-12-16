@@ -418,3 +418,23 @@
         }]
     }
 }
+
+//用户-查看订单 --Skitwin
+{
+    url: '/api/usercheckoreder'
+    return:{
+        state: int
+        bookinfo:[{
+            bookid: string
+            name:   string
+            price: int
+            detail: string
+            isbn:   string
+            number: string
+            picture:string
+            state:  string
+            author: string
+            class:  string
+        }]
+    }
+}

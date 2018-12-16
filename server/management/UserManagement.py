@@ -89,3 +89,13 @@ class UserManagement(object):
         except:
             return jsonify({'state': State.FormErr})
         return jsonify(UserDBmanagement.cancel_collect(session['userid'], bookid))
+
+    @staticmethod
+    def check_order():
+        if 'userid' not in session:
+            return jsonify({'state': State.NotLogin})
+        try:
+            userid = session['userid']
+        except:
+            return jsonify({'state': State.FormErr})
+        return jsonify(UserDBmanagement.check_order(userid))
