@@ -11,6 +11,7 @@ _sql_getbook_info = "select bookid, name, price, detail, ISBN, number, picture, 
 _sql_insert_collect = "insert into User_Book_Collect values(?, ?, ?);"
 _sql_get_sellerid = "select sellerid from user_book_publish where userid=?;"
 _sql_modify_state = "update book set state = ? where bookid = ?"
+_sql_delete_book = "delete from book where bookid = ?"
 _key_book_info = ('bookid', 'name', 'price', 'detail', 'ISBN', 'number', 'picture', 'state', 'author', 'class')
 
 
@@ -77,3 +78,14 @@ class BookDBmanagement(object):
             return {'state': State.OK, 'success': True}
         pass
     pass
+
+    @staticmethod
+    def sold_out_book(bookid):
+        #下架书籍
+        with DBContext() as con:
+            if not con.exec(_sql_delete_book, (bookid,)):
+                return {'state': State.DBErr}
+            return {'state': State.OK}
+        pass
+    pass
+

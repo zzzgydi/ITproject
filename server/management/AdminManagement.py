@@ -54,3 +54,17 @@ class AdminManagement(object):
             AdminDBmanagement.add_book_admin_table(bookid, adminid)
         return jsonify(result)
 
+    @staticmethod
+    def sold_out_book():
+        #下架书籍
+        if 'adminid' not in session:
+            return jsonify({'state': State.NotLogin})
+        try:
+            reqdata = json.loads(request.data)
+            bookid = reqdata['bookid']
+        except:
+            return jsonify({'state': State.FormErr})
+        result = BookDBmanagement.sold_out_book(bookid)
+        return jsonify(result)
+
+

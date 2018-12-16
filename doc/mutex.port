@@ -347,4 +347,14 @@
     }
 }
 
+//下架书籍 --Skitwin
+{
+    url: '/api/soldoutbook'
+    param:{
+        bookid: string
+    }
+    return:{
+        state: int
+    }
+}
 
