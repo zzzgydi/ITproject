@@ -66,7 +66,8 @@ app.add_url_rule('/api/reviewed', view_func=AdminManagement.search_reviewed_book
 app.add_url_rule('/api/viewuser', view_func=AdminManagement.view_user, methods=['POST'])
 #管理员-审核书籍
 app.add_url_rule('/api/changestate', view_func=AdminManagement.book_audit, methods=['POST'])
-
+#管理员-查看订单
+app.add_url_rule('/api/admincheckorder', view_func=AdminManagement.check_order, methods=['POST'])
 #下架书籍
 app.add_url_rule('/api/soldoutbook', view_func=AdminManagement.sold_out_book, methods=['POST'])
 

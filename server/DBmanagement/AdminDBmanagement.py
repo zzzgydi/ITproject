@@ -8,6 +8,7 @@ _sql_unreviewed_book = "select bookid, name, price, detail, isbn, number, pictur
 _sql_reviewed_book = "select bookid, name, price, detail, isbn, number, picture, state, author, class, time from book natural join user_book_publish where state = \"待售\";"
 _sql_user_info = "select userid, address, phone, idnumber, name from user;"
 _sql_book_admin = "insert into book_admin(bookid, adminid) values (?,?);"
+_sql_check_order = ""
 _key_book_info = ('bookid', 'name', 'price', 'detail', 'ISBN', 'number', 'picture', 'state', 'author', 'class', 'time')
 _key_user_info = ('userid', 'address', 'phone', 'idnumber', 'name')
 
@@ -98,5 +99,14 @@ class AdminDBmanagement(object):
             return {'state': State.OK}
         pass
 
+    @staticmethod
+    def check_order():
+        #查看订单
+        with DBContext() as con:
+            if not con.exec(_sql_check_order):
+                return {'state': State.DBErr}
+            orderlist = con.get_cursor().fetchall()
+            return {'state': State.OK, 'orderlist': orderlist}
+        pass
 
 

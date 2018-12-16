@@ -75,4 +75,13 @@ class AdminManagement(object):
         result = BookDBmanagement.sold_out_book(bookid)
         return jsonify(result)
 
+    @staticmethod
+    def check_order():
+        #查看订单
+        if 'adminid' not in session:
+            return jsonify({'state': State.NotLogin})
+        result = AdminDBmanagement.check_order()
+        return jsonify(result)
+
+
 
