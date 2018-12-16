@@ -313,7 +313,7 @@
 
 //管理员-查看未审核书籍 -- Skitwin
 {
-    url: '/api/searchunreviewedbook'
+    url: '/api/unreviewed'
     return:{
         state: int
         booklist:[{
@@ -327,6 +327,7 @@
             state:  string
             author: string
             class:  string
+            time:   string
         }]
     }
 }
