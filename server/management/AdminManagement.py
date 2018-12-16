@@ -30,6 +30,14 @@ class AdminManagement(object):
         return jsonify(result)
 
     @staticmethod
+    def search_reviewed_book():
+        # 查询已审核的书
+        if 'adminid' not in session:
+            return jsonify({'state': State.NotLogin})
+        result = AdminDBmanagement.search_reviewed_book()
+        return jsonify(result)
+
+    @staticmethod
     def view_user():
         # 查看用户信息
         if 'adminid' not in session:

@@ -333,6 +333,28 @@
 }
 
 
+//管理员-查看已审核书籍 -- Skitwin
+{
+    url: '/api/reviewed'
+    return:{
+        state: int
+        booklist:[{
+            bookid: string
+            name:   string
+            price:  int
+            detail: string
+            ISBN:   string
+            number: string
+            picture:string
+            state:  string
+            author: string
+            class:  string
+            time:   string
+        }]
+    }
+}
+
+
 //管理员-查看用户 -- Skitwin
 {
     url: '/api/viewuser'

@@ -4,10 +4,10 @@ from server.data.DBContext import DBContext
 from server.mutex.State import State
 from server.mutex import Tools
 
-_sql_book_state = "select * from book where state = \"待审核\";"
+_sql_unreviewed_book = "select bookid, name, price, detail, isbn, number, picture, state, author, class, time from book natural join user_book_publish where state = \"待审核\";"
+_sql_reviewed_book = "select bookid, name, price, detail, isbn, number, picture, state, author, class, time from book natural join user_book_publish where state = \"已审核\";"
 _sql_user_info = "select userid, address, phone, idnumber, name from user;"
 _sql_book_admin = "insert into book_admin(bookid, adminid) values (?,?);"
-_sql_publish_book_time = "select time from user_book__publish where bookid = ?"
 _key_book_info = ('bookid', 'name', 'price', 'detail', 'ISBN', 'number', 'picture', 'state', 'author', 'class', 'time')
 _key_user_info = ('userid', 'address', 'phone', 'idnumber', 'name')
 
@@ -51,14 +51,25 @@ class AdminDBmanagement(object):
     def search_unreviewed_book():
         # 查询未审核的书
         with DBContext() as con:
-            if not con.exec(_sql_book_state):
+            if not con.exec(_sql_unreviewed_book):
                 return {'state': State.DBErr}
             tempList = con.get_cursor().fetchall()
-            if not con.exec(_sql_publish_book_time):
-                return {'state': State.DBErr}
-            pubTime = con.get_cursor().fetchone()
         try:
-            res = Tools.list_tuple2dict(_key_book_info, tempList, pubTime)
+            res = Tools.list_tuple2dict(_key_book_info, tempList)
+        except:
+            return {'state': State.Error}
+        return {'state': State.OK, 'booklist': res}
+    pass
+
+    @staticmethod
+    def search_reviewed_book():
+        # 查询已审核的书
+        with DBContext() as con:
+            if not con.exec(_sql_reviewed_book):
+                return {'state': State.DBErr}
+            tempList = con.get_cursor().fetchall()
+        try:
+            res = Tools.list_tuple2dict(_key_book_info, tempList)
         except:
             return {'state': State.Error}
         return {'state': State.OK, 'booklist': res}
