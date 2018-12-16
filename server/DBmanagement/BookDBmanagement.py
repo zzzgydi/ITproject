@@ -16,7 +16,7 @@ _sql_recommand = "select bookid, name, price, detail, ISBN, number, picture, sta
 _key_book_info = ('bookid', 'name', 'price', 'detail', 'ISBN',
                   'number', 'picture', 'state', 'author', 'class')
 _book_class = ('计算机', '工程科学', '经济管理', '自然科学', '英语', '数学', '文学艺术', '政治法律', '其他')
-_sql_delete_book = "delete from book where bookid = ?"
+_sql_delete_book = "update book set state=? where bookid=?;"
 _key_book_info = ('bookid', 'name', 'price', 'detail', 'ISBN', 'number', 'picture', 'state', 'author', 'class')
 
 
@@ -126,7 +126,7 @@ class BookDBmanagement(object):
     def sold_out_book(bookid):
         #下架书籍
         with DBContext() as con:
-            if not con.exec(_sql_delete_book, (bookid,)):
+            if not con.exec(_sql_delete_book, ('下架', bookid)):
                 return {'state': State.DBErr}
             return {'state': State.OK}
         pass

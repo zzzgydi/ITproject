@@ -1,6 +1,4 @@
-import os
-import sys
-sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+# -*- coding=utf-8 -*-
 from server.DBmanagement.OrderDBmanagement import OrderDBmanagement
 from flask import session, request, jsonify
 from server.mutex.State import State
@@ -16,12 +14,10 @@ class OrderManagement(object):
             reqdata = json.loads(request.data)
             buyerid = session['userid']
             bookid = reqdata['bookid']
-            number = reqdata['number']
+            number = 1
         except:
             return jsonify({'state': State.FormErr})
         result = OrderDBmanagement.addNewOrder(buyerid, bookid, number)
-        if result['state'] != State.OK:
-            return jsonify({'state': result['state']})
         return jsonify(result)
 
     @staticmethod

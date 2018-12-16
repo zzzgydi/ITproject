@@ -3,9 +3,6 @@ import time
 from server.mutex import Tools
 from server.mutex.State import State
 from server.data.DBContext import DBContext
-import os
-import sys
-sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
 _const_key_view_orders = ('bookid', 'orderid', 'time', 'total', 'state',
                           'name', 'picture', 'author', 'class', 'phone')
@@ -14,30 +11,27 @@ _const_key_view_orders = ('bookid', 'orderid', 'time', 'total', 'state',
 class OrderDBmanagement(object):
     @staticmethod
     def addNewOrder(buyerid, bookid, number):
-        ts = time.time()
-        ts = int(ts)  # 秒级时间戳
-        dt = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(ts))
+        ts = int(time.time())  # 秒级时间戳
         orderid = buyerid + 'A' + str(ts)
         state = "未完成"
         with DBContext() as context:
-            if not context.exec("SELECT price from book where bookid=?", (bookid, )):
+            if not context.exec("SELECT price from book where bookid=?;", (bookid, )):
+                return {'state': State.DBErr}
+            result = context.get_cursor().fetchone()
+            if not result:
+                return {'state': State.NoBookErr}
+            total = result[0]
+            if not context.exec("INSERT INTO orders values(?,?,?,?,?,?);", (bookid, orderid, Tools.get_current_time(), number, total, state)):
+                return {'state': State.DBErr}
+            if not context.exec("SELECT userid from user_book_publish where bookid=?;", (bookid, )):
                 return {'state': State.DBErr}
             result = context.get_cursor().fetchone()
             if not result:
                 return {'state': State.NoBookErr}
             result = result[0]
-            total = result
-            if not context.exec("INSERT INTO orders values(?,?,?,?,?,?)", (bookid, orderid, dt, number, total, state)):
+            if not context.exec("INSERT INTO user_order values(?,?,?,?);", (bookid, orderid, buyerid, result)):
                 return {'state': State.DBErr}
-            if not context.exec("SELECT userid from user_book_publish where bookid=?", (bookid, )):
-                return {'state': State.DBErr}
-            result = context.get_cursor().fetchone()
-            if not result:
-                return {'state': State.NoBookErr}
-            result = result[0]
-            if not context.exec("INSERT INTO user_order values(?,?,?,?)", (bookid, orderid, buyerid, result)):
-                return {'state': State.DBErr}
-        return {'orderid': orderid, 'state': State.OK}
+        return {'orderid': orderid, 'state': State.OK, 'price': total}
 
     @staticmethod
     def view_orders(userid, buyerornot):
