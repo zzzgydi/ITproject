@@ -230,7 +230,7 @@
 
 //改变书籍状态 -- 云/Skitwin
 {
-    url: '/api/changestate'
+    url: '/api/bookstate'
     param: {
         bookid: string
         newstate: string
@@ -414,7 +414,7 @@
             sellerid: string
             price: int
             bookname: string
-            bookstate: string
+            orderstate: string
         }]
     }
 }

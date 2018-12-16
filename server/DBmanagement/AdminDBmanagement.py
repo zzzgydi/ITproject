@@ -11,6 +11,7 @@ _sql_book_admin = "insert into book_admin(bookid, adminid) values (?,?);"
 _sql_check_order = "select buyerid, sellerid, book.price, book.name, order.state from user_order natural join order natural join book"
 _key_book_info = ('bookid', 'name', 'price', 'detail', 'ISBN', 'number', 'picture', 'state', 'author', 'class', 'time')
 _key_user_info = ('userid', 'address', 'phone', 'idnumber', 'name')
+_key_order_info = ('buyerid', 'sellerid', 'price', 'bookname', 'orderstate')
 
 
 class AdminDBmanagement(object):
@@ -106,7 +107,11 @@ class AdminDBmanagement(object):
             if not con.exec(_sql_check_order):
                 return {'state': State.DBErr}
             orderlist = con.get_cursor().fetchall()
-            return {'state': State.OK, 'orderlist': orderlist}
+            try:
+                res = Tools.list_tuple2dict(_key_order_info, orderlist)
+            except:
+                return {'state': State.Error}
+            return {'state': State.OK, 'orderlist': res}
         pass
 
 
