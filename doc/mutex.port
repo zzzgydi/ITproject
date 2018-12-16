@@ -358,7 +358,7 @@
     }
 }
 
-//根据书籍分类获取书籍列表
+//根据书籍分类获取书籍列表 -- gydi
 {
     url: '/api/bookclass'
     param: {
@@ -367,7 +367,16 @@
     return: {
         state: int
         booklist: [{
-
+            bookid: string
+            name:   string
+            price:  int
+            detail: string
+            ISBN:   string
+            number: string
+            picture:string
+            state:  string
+            author: string
+            class:  string
         }]
     }
 }
