@@ -435,6 +435,7 @@
             state:  string
             author: string
             class:  string
+            time:   string
         }]
     }
 }

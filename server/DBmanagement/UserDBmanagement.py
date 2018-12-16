@@ -21,8 +21,8 @@ _key_view_collect = ('bookid', 'time', 'name', 'price',
                      'picture', 'state', 'author', 'class')
 _sql_collect_book = "insert into user_book_collect values (?,?,?);"
 _sql_cancel_coll = "delete from user_book_collect where userid=? and bookid=?;"
-_sql_user_order = "select book.bookid, book.name, book.price, book.detail, book.isbn, book.number, book.picture, book.state, book.author, book.class from book join user_book_publish using (bookid) where user_book_publish.userid = ?;"
-_key_user_order = ('bookid', 'name', 'price', 'detail', 'isbn', 'number', 'picture', 'state', 'author', 'class')
+_sql_user_order = "select book.bookid, book.name, book.price, book.detail, book.isbn, book.number, book.picture, book.state, book.author, book.class, user_book_publish.time from book join user_book_publish using (bookid) where user_book_publish.userid = ?;"
+_key_user_order = ('bookid', 'name', 'price', 'detail', 'isbn', 'number', 'picture', 'state', 'author', 'class', 'time')
 
 
 class UserDBmanagement(object):
