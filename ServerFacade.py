@@ -14,7 +14,7 @@ from server.DBmanagement import AdminDBmanagement
 
 app = Flask(__name__,
             static_folder="./client/static",
-            template_folder="./client")
+            template_folder="./client/template")
 
 
 #app.config['SECRET_KEY'] = "ITPROJECT2018"
@@ -59,7 +59,9 @@ app.add_url_rule('/api/search', view_func=BookManagement.searchBook, methods=['P
 app.add_url_rule('/api/viewbook', view_func=BookManagement.viewBook, methods=['POST'])
 
 #管理员-查看未审核书籍
-app.add_url_rule('/api/searchunreviewedbook', view_func=AdminManagement.search_unreviewed_book, methods=['POST'])
+app.add_url_rule('/api/unreviewed', view_func=AdminManagement.search_unreviewed_book, methods=['POST'])
+#管理员-查看已审核书籍
+app.add_url_rule('/api/reviewed', view_func=AdminManagement.search_reviewed_book, methods=['POST'])
 #管理员-查看用户
 app.add_url_rule('/api/viewuser', view_func=AdminManagement.view_user, methods=['POST'])
 #管理员-审核书籍

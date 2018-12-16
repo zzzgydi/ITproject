@@ -4,10 +4,11 @@ from server.data.DBContext import DBContext
 from server.mutex.State import State
 from server.mutex import Tools
 
-_sql_book_state = "select * from book where state = \"待审核\";"
+_sql_unreviewed_book = "select bookid, name, price, detail, isbn, number, picture, state, author, class, time from book natural join user_book_publish where state = \"未审核\";"
+_sql_reviewed_book = "select bookid, name, price, detail, isbn, number, picture, state, author, class, time from book natural join user_book_publish where state = \"待售\";"
 _sql_user_info = "select userid, address, phone, idnumber, name from user;"
 _sql_book_admin = "insert into book_admin(bookid, adminid) values (?,?);"
-_key_book_info = ('bookid', 'name', 'price', 'detail', 'ISBN', 'number', 'picture', 'state', 'author', 'class')
+_key_book_info = ('bookid', 'name', 'price', 'detail', 'ISBN', 'number', 'picture', 'state', 'author', 'class', 'time')
 _key_user_info = ('userid', 'address', 'phone', 'idnumber', 'name')
 
 
@@ -49,8 +50,22 @@ class AdminDBmanagement(object):
     @staticmethod
     def search_unreviewed_book():
         # 查询未审核的书
-        with DBContext as con:
-            if not con.exec(_sql_book_state):
+        with DBContext() as con:
+            if not con.exec(_sql_unreviewed_book):
+                return {'state': State.DBErr}
+            tempList = con.get_cursor().fetchall()
+        try:
+            res = Tools.list_tuple2dict(_key_book_info, tempList)
+        except:
+            return {'state': State.Error}
+        return {'state': State.OK, 'booklist': res}
+    pass
+
+    @staticmethod
+    def search_reviewed_book():
+        # 查询已审核的书
+        with DBContext() as con:
+            if not con.exec(_sql_reviewed_book):
                 return {'state': State.DBErr}
             tempList = con.get_cursor().fetchall()
         try:
@@ -63,7 +78,7 @@ class AdminDBmanagement(object):
     @staticmethod
     def view_user():
         # 查看用户信息
-        with DBContext as con:
+        with DBContext() as con:
             if not con.exec(_sql_user_info):
                 return {'state': State.DBErr}
             userList = con.get_cursor().fetchall()
@@ -77,7 +92,7 @@ class AdminDBmanagement(object):
     @staticmethod
     def add_book_admin_table(bookid, adminid):
         #添加管理员与审核书籍的关系
-        with DBContext as con:
+        with DBContext() as con:
             if not con.exec(_sql_book_admin, (bookid, adminid)):
                 return {'state': State.DBErr}
             return {'state': State.OK}
