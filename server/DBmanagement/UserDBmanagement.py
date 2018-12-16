@@ -148,7 +148,8 @@ class UserDBmanagement(object):
         pass
 
     @staticmethod
-    def check_order(userid):
+    def check_publish(userid):
+         #查看发布
         with DBContext() as con:
             if not con.exec(_sql_user_order, (userid,)):
                 return {'state': State.DBErr}

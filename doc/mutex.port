@@ -419,9 +419,9 @@
     }
 }
 
-//用户-查看订单 --Skitwin
+//用户-查看发布 --Skitwin
 {
-    url: '/api/usercheckoreder'
+    url: '/api/usercheckpublish'
     return:{
         state: int
         bookinfo:[{

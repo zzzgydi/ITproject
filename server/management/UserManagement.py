@@ -91,11 +91,12 @@ class UserManagement(object):
         return jsonify(UserDBmanagement.cancel_collect(session['userid'], bookid))
 
     @staticmethod
-    def check_order():
+    def check_publish():
+        #查看发布
         if 'userid' not in session:
             return jsonify({'state': State.NotLogin})
         try:
             userid = session['userid']
         except:
             return jsonify({'state': State.FormErr})
-        return jsonify(UserDBmanagement.check_order(userid))
+        return jsonify(UserDBmanagement.check_publish(userid))
