@@ -13,7 +13,7 @@ from server.management.BookManagement import BookManagement
 
 app = Flask(__name__,
             static_folder="./client/static",
-            template_folder="./client")
+            template_folder="./client/template")
 
 
 #app.config['SECRET_KEY'] = "ITPROJECT2018"
