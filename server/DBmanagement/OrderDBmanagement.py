@@ -87,8 +87,9 @@ class OrderDBmanagement(object):
                 useraddress = temp[0]
                 username = temp[2]
                 userphone = temp[1]
-        return {'state': State.OK, 'bookname': result[0], 'orderid': orderid, 'time': result[1], 'number': result[2], 'total': result[3],
+            orderdetail={'bookname': result[0], 'orderid': orderid, 'time': result[1], 'number': result[2], 'total': result[3],
                 'orderstate': result[4], 'username': username, 'userphone': userphone, 'useraddress': useraddress}
+        return {'state': State.OK, 'orderdetail': orderdetail}
 
     @staticmethod
     def changeOrderState(orderid, orderstate):
