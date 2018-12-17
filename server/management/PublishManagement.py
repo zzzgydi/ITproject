@@ -17,8 +17,8 @@ class PublishManagement:
     @staticmethod
     def upload_file():
         # 上传图片文件
-        # if 'userid' not in session:
-        #   return jsonify({"state": State.NotLogin})
+        if 'userid' not in session:
+          return jsonify({"state": State.NotLogin})
         print("file upload...")
         try:
             f = request.files['file']
