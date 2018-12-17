@@ -6,13 +6,13 @@ from server.mutex import Tools
 import time
 import random
 
-_sql_search = "select bookid, name, price, detail, ISBN, number, picture, state, author, class from book where name like ?;"
+_sql_search = "select bookid, name, price, detail, ISBN, number, picture, state, author, class from book where name like ? and state != '待审核';"
 _sql_getbook_info = "select bookid, name, price, detail, ISBN, number, picture, state, author, class from book where bookid=?;"
 _sql_insert_collect = "insert into User_Book_Collect values(?, ?, ?);"
 _sql_get_sellerid = "select sellerid from user_book_publish where userid=?;"
 _sql_modify_state = "update book set state = ? where bookid = ?"
-_sql_get_class = "select bookid, name, price, detail, ISBN, number, picture, state, author, class from book where class=?;"
-_sql_recommand = "select bookid, name, price, detail, ISBN, number, picture, state, author, class from book;"
+_sql_get_class = "select bookid, name, price, detail, ISBN, number, picture, state, author, class from book where class=? and state != '待审核';"
+_sql_recommand = "select bookid, name, price, detail, ISBN, number, picture, state, author, class from book where state != '待审核';"
 _key_book_info = ('bookid', 'name', 'price', 'detail', 'ISBN',
                   'number', 'picture', 'state', 'author', 'class')
 _book_class = ('计算机', '工程科学', '经济管理', '自然科学', '英语', '数学', '文学艺术', '政治法律', '其他')
