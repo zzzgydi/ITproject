@@ -57,4 +57,4 @@ class BookManagement(object):
                 res = BookDBmanagement.get_recommand(24)
             return jsonify(res)
         except:
-            return {'state': State.FormErr}
+            return jsonify({'state': State.FormErr})

@@ -14,10 +14,10 @@ from server.DBmanagement import AdminDBmanagement
 
 app = Flask(__name__,
             static_folder="./client/static",
-            template_folder="./client/template")
+            template_folder="./client")
 
 
-app.config['SECRET_KEY'] = "ITPROJECT2018TEST"
+app.config['SECRET_KEY'] = "ITPROJECT2018version1_0"
 # 设置为24位的字符,每次运行服务器都是不同的，所以服务器启动一次上次的session就清除。
 #app.config['SECRET_KEY'] = os.urandom(24)
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=7)  # 设置session的保存时间。
