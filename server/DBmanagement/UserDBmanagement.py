@@ -13,12 +13,12 @@ _sql_revise_ = "update user set {} where userid=?;"
 _sql_user_info = "select password,address,phone,idnumber,name from user where userid=?;"
 _key_user_info = ('password', 'address', 'phone', 'idnumber', 'name')
 _sql_view_collect = '''
-    select bookid,time,name,price,picture,state,author,class
+    select bookid,time,name,price,picture,state,author,class,detail,isbn
     from user_book_collect join book using (bookid)
     where userid=?;
 '''
 _key_view_collect = ('bookid', 'time', 'name', 'price',
-                     'picture', 'state', 'author', 'class')
+                     'picture', 'state', 'author', 'class', 'detail', 'isbn')
 _sql_collect_book = "insert into user_book_collect (userid,bookid,time) values (?,?,?);"
 _sql_cancel_coll = "delete from user_book_collect where userid=? and bookid=?;"
 _sql_user_order = "select book.bookid, book.name, book.price, book.detail, book.isbn, book.number, book.picture, book.state, book.author, book.class, user_book_publish.time from book join user_book_publish using (bookid) where user_book_publish.userid = ?;"

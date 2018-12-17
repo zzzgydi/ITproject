@@ -92,8 +92,8 @@ class OrderDBmanagement(object):
 
     @staticmethod
     def changeOrderState(orderid, orderstate):
-        if orderstate != '完成' or orderstate != '已取消':
-            return {'state': State.FormErr}
+        if orderstate != "完成" and orderstate != '已取消':
+            return {'state': State.Debug}
         with DBContext() as context:
             if not context.exec("SELECT bookid,orders.state,book.state FROM orders join book using (bookid) where orderid=?;", (orderid,)):
                 return {'state': State.DBErr}
@@ -101,7 +101,7 @@ class OrderDBmanagement(object):
             if not result:
                 return {'state': State.NoOrderErr}
             bookid, orders_state, book_state = result
-            if not (orders_state == '未完成' and book_state == '已售'):
+            if orders_state != '未完成' and book_state != '已售':
                 return {'state': State.Error}
             if not context.exec("UPDATE orders set state=? where orderid=? ", (orderstate, orderid)):
                 return {'state': State.DBErr}

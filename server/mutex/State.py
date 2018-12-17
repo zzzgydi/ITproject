@@ -17,3 +17,5 @@ class State(IntEnum):
     NoBookErr   = 201
     NoOrderErr  = 202
     OUErr       = 203
+    Debug       = 500
+    

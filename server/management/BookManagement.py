@@ -10,8 +10,6 @@ class BookManagement(object):
 
     @staticmethod
     def searchBook():
-        # if 'userid' not in session:
-        #   return jsonify({'state': State.NotLogin})
         try:
             reqdata = json.loads(request.data)
             keyword = reqdata['keyword']
@@ -22,8 +20,6 @@ class BookManagement(object):
 
     @staticmethod
     def viewBook():
-        # if 'userid' not in session:
-        #    return jsonify({'state': State.NotLogin})
         try:
             reqdata = json.loads(request.data)
             bookid = reqdata['bookid']
@@ -38,7 +34,6 @@ class BookManagement(object):
             return jsonify({'state': State.NotLogin})
         try:
             reqdata = json.loads(request.data)
-            # reqdata['userid'] # userid直接从session中拿
             userid = session['userid']
             bookid = reqdata['bookid']
         except:

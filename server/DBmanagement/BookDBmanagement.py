@@ -126,9 +126,16 @@ class BookDBmanagement(object):
     def sold_out_book(bookid):
         #下架书籍
         with DBContext() as con:
+            if not con.exec("select state from book where bookid=?;", (bookid,)):
+                return {'state': State.DBErr}
+            res = con.get_cursor().fetchone()
+            if not res:
+                return {'state': State.DBErr}
+            if res[0] == '下架':
+                return {'state': State.Debug}
             if not con.exec(_sql_delete_book, ('下架', bookid)):
                 return {'state': State.DBErr}
             return {'state': State.OK}
         pass
-    pass
+
 

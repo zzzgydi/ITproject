@@ -22,6 +22,9 @@ class AdminDBmanagement(object):
         with DBContext() as con:
             if not con.exec(_sql_admin_login, (adminid, pwd)):
                 return {'state': State.Error}
+            res = con.get_cursor().fetchone()
+            if not res:
+                return {'state': State.Error}
             return {'state': State.OK}
         pass
 
