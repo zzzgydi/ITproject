@@ -5,7 +5,7 @@ from server.mutex.State import State
 from server.data.DBContext import DBContext
 
 _const_key_view_orders = ('bookid', 'orderid', 'time', 'total', 'state',
-                          'name', 'picture', 'author', 'class', 'phone')
+                          'name', 'picture', 'author', 'class')
 
 
 class OrderDBmanagement(object):
@@ -15,12 +15,15 @@ class OrderDBmanagement(object):
         orderid = buyerid + 'A' + str(ts)
         state = "未完成"
         with DBContext() as context:
-            if not context.exec("SELECT price from book where bookid=?;", (bookid, )):
+            if not context.exec("SELECT price,state from book where bookid=?;", (bookid, )):
                 return {'state': State.DBErr}
             result = context.get_cursor().fetchone()
             if not result:
                 return {'state': State.NoBookErr}
             total = result[0]
+            bookstate = result[1]
+            if bookstate != "待售":
+                return {'state': State.NoSale}
             if not context.exec("INSERT INTO orders values(?,?,?,?,?,?);", (bookid, orderid, Tools.get_current_time(), number, total, state)):
                 return {'state': State.DBErr}
             if not context.exec("SELECT userid from user_book_publish where bookid=?;", (bookid, )):
@@ -31,13 +34,15 @@ class OrderDBmanagement(object):
             result = result[0]
             if not context.exec("INSERT INTO user_order values(?,?,?,?);", (bookid, orderid, buyerid, result)):
                 return {'state': State.DBErr}
+            if not context.exec("update book set state='已售' where bookid=?;", (bookid,)):
+                return {'state': State.DBErr}
         return {'orderid': orderid, 'state': State.OK, 'price': total}
 
     @staticmethod
     def view_orders(userid, buyerornot):
         _sql_view_template = '''
             select bookid,orderid,time,total,orders.state,name,picture,author,class
-            from orders join user_order using (bookid,orderid) join book using (bookid) 
+            from orders join user_order using (bookid,orderid) join book using (bookid)
             where {}=?;
         '''
         _sql = _sql_view_template.format(
@@ -63,7 +68,7 @@ class OrderDBmanagement(object):
             result = context.get_cursor().fetchone()
             if not result:
                 return {'state': State.NoOrderErr}
-            #bookname = result[0]
+            # bookname = result[0]
             if buyerornot == "True":
                 if not context.exec("SELECT address,phone,name from user_order join user on userid=sellerid where orderid=? ", (orderid, )):
                     return {'state': State.DBErr}
@@ -87,33 +92,19 @@ class OrderDBmanagement(object):
 
     @staticmethod
     def changeOrderState(orderid, orderstate):
+        if orderstate != '已完成' or orderstate != '已取消':
+            return {'state': State.FormErr}
         with DBContext() as context:
-            if not context.exec("SELECT * FROM orders where orderid=?", (orderid,)):
+            if not context.exec("SELECT bookid,orders.state,book.state FROM orders join book using (bookid) where orderid=?;", (orderid,)):
                 return {'state': State.DBErr}
             result = context.get_cursor().fetchone()
             if not result:
                 return {'state': State.NoOrderErr}
+            bookid, orders_state, book_state = result
+            if not (orders_state == '未完成' and book_state == '已售'):
+                return {'state': State.Error}
             if not context.exec("UPDATE orders set state=? where orderid=? ", (orderstate, orderid)):
                 return {'state': State.DBErr}
+            if orderstate == '已取消' and not context.exec("UPDATE book set state=? where bookid=? ", ('待售', bookid)):
+                return {'state': State.DBErr}
         return {'state': State.OK}
-
-# if __name__ == '__main__':
-    # pass
-    # with DBContext() as context:
-        #context.exec("INSERT INTO user_order values(?,?,?,?)", ("BOOK1", "ORDER1", "BUYERID", "SELLERID"))
-        #context.exec("INSERT INTO user_order values(?,?,?,?)", ("BOOK2", "ORDER2", "BUYERID", "SELLERID"))
-        #context.exec("INSERT INTO user_order values(?,?,?,?)", ("BOOK3", "ORDER3", "BUYERID", "SELLERID"))
-    # with DBContext() as context:
-        #context.exec("SELECT orderid from user_order where buyerid=?", ("BUYERID",))
-        #result = context.get_cursor().fetchall()
-        # print(result)
-    # OrderDBmanagement().viewOrders(userid="BUYERID")
-    # with DBContext() as context:
-        #context.exec("SELECT * from orders", ())
-        #result = context.get_cursor().fetchall()
-        # print(result)
-    # OrderDBmanagement().changeOrderState("11","hh")
-    # with DBContext() as context:
-        #context.exec("SELECT * from orders", ())
-        #result = context.get_cursor().fetchall()
-        # print(result)

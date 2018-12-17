@@ -57,6 +57,12 @@ class AdminManagement(object):
             adminid = session['adminid']
         except:
             return jsonify({'state': State.FormErr})
+        if newstate == "审核失败":
+            newstate = "未通过"
+        elif newstate == "待售":
+            pass
+        else:
+            newstate = "待审核"
         result = BookDBmanagement.changeBookState(bookid, newstate)
         if result and result['state'] == State.OK:
             AdminDBmanagement.add_book_admin_table(bookid, adminid)

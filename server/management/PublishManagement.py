@@ -49,8 +49,8 @@ class PublishManagement:
     @staticmethod
     def publish_book():
         # 发布书籍
-        # if 'userid' not in session:
-        #   return jsonify({"state": State.NotLogin})
+        if 'userid' not in session:
+          return jsonify({"state": State.NotLogin})
         try:
             reqdata = json.loads(request.data)
             name = reqdata['name']

@@ -23,6 +23,13 @@ class UserManagement(object):
         return jsonify({'state': State.OK})
 
     @staticmethod
+    def logout():
+        if 'userid' in session:
+            session.clear()
+            return jsonify({'state': State.OK})
+        return jsonify({'state': State.NotLogin})
+
+    @staticmethod
     def register():
         try:
             reqdata = json.loads(request.data)
@@ -92,7 +99,7 @@ class UserManagement(object):
 
     @staticmethod
     def check_publish():
-        #查看发布
+        # 查看发布
         if 'userid' not in session:
             return jsonify({'state': State.NotLogin})
         try:

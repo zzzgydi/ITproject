@@ -5,7 +5,7 @@ from server.mutex.State import State
 from server.mutex import Tools
 
 _sql_unreviewed_book = "select bookid, name, price, detail, isbn, number, picture, state, author, class, time from book natural join user_book_publish where state = \"待审核\";"
-_sql_reviewed_book = "select bookid, name, price, detail, isbn, number, picture, state, author, class, time from book natural join user_book_publish where state = \"待售\";"
+_sql_reviewed_book = "select bookid, name, price, detail, isbn, number, picture, state, author, class, time from book natural join user_book_publish where state is not '待审核' or state is not '未通过';"
 _sql_user_info = "select userid, address, phone, idnumber, name from user;"
 _sql_book_admin = "insert into book_admin(bookid, adminid) values (?,?);"
 _sql_check_order = "select buyerid, sellerid, orders.total, book.name, orders.state from user_order join orders using (bookid, orderid) join book using (bookid)"

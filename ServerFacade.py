@@ -17,9 +17,9 @@ app = Flask(__name__,
             template_folder="./client/template")
 
 
-#app.config['SECRET_KEY'] = "ITPROJECT2018"
+app.config['SECRET_KEY'] = "ITPROJECT2018TEST"
 # 设置为24位的字符,每次运行服务器都是不同的，所以服务器启动一次上次的session就清除。
-app.config['SECRET_KEY'] = os.urandom(24)
+#app.config['SECRET_KEY'] = os.urandom(24)
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=7)  # 设置session的保存时间。
 
 
@@ -31,6 +31,7 @@ def catch_all(path):
 
 #gydi
 app.add_url_rule('/api/login', view_func=UserManagement.login, methods=['POST'])
+app.add_url_rule('/api/logout', view_func=UserManagement.logout)
 app.add_url_rule('/api/register', view_func=UserManagement.register, methods=['POST'])
 app.add_url_rule('/api/reviseinfo', view_func=UserManagement.revise_info, methods=['POST'])
 app.add_url_rule('/api/getuserinfo', view_func=UserManagement.get_info)
