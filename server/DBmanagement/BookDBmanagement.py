@@ -10,9 +10,9 @@ _sql_search = "select bookid, name, price, detail, ISBN, number, picture, state,
 _sql_getbook_info = "select bookid, name, price, detail, ISBN, number, picture, state, author, class from book where bookid=?;"
 _sql_insert_collect = "insert into User_Book_Collect values(?, ?, ?);"
 _sql_get_sellerid = "select sellerid from user_book_publish where userid=?;"
-_sql_modify_state = "update book set state = ? where bookid = ?"
+_sql_modify_state = "update book set state = ? where bookid = ?;"
 _sql_get_class = "select bookid, name, price, detail, ISBN, number, picture, state, author, class from book where class=? and state != '待审核';"
-_sql_recommand = "select bookid, name, price, detail, ISBN, number, picture, state, author, class from book where state != '待审核';"
+_sql_recommand = "select bookid, name, price, detail, ISBN, number, picture, state, author, class from book where state == '待售';"
 _key_book_info = ('bookid', 'name', 'price', 'detail', 'ISBN',
                   'number', 'picture', 'state', 'author', 'class')
 _book_class = ('计算机', '工程科学', '经济管理', '自然科学', '英语', '数学', '文学艺术', '政治法律', '其他')
@@ -62,25 +62,19 @@ class BookDBmanagement(object):
     pass
 
     @staticmethod
-    def collectBook(userid, bookid):
-        # 通过关联用户和书籍进行收藏
-        with DBContext() as con:
-            ts = time.time()
-            ts = int(ts)  # 秒级时间戳
-            dt = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(ts))
-            if not con.exec(_sql_insert_collect, (userid, bookid, dt)):
-                return {'state': State.DBErr, "sucess": False}
-            return {'state': State.OK, 'sucess': True}
-        pass
-    pass
-
-    @staticmethod
     def changeBookState(bookid, newstate):
         # 更改书籍状态
         with DBContext() as con:
+            if not con.exec("select state from book where bookid=?;", (bookid,)):
+                return {'state': State.DBErr}
+            res = con.get_cursor().fetchone()
+            if not res:
+                return {'state': State.Error}
+            if res[0] != "待审核" and newstate != '待售' and newstate != '审核失败':
+                return {'state': State.Debug}
             if not con.exec(_sql_modify_state, (newstate, bookid)):
-                return {'state': State.DBErr, "success": False}
-            return {'state': State.OK, 'success': True}
+                return {'state': State.DBErr}
+            return {'state': State.OK}
         pass
     pass
 

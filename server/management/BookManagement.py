@@ -29,19 +29,6 @@ class BookManagement(object):
         return jsonify(result)
 
     @staticmethod
-    def collectBook():
-        if 'userid' not in session:
-            return jsonify({'state': State.NotLogin})
-        try:
-            reqdata = json.loads(request.data)
-            userid = session['userid']
-            bookid = reqdata['bookid']
-        except:
-            return jsonify({'state': State.FormErr})
-        result = BookDBmanagement.collectBook(userid, bookid)
-        return jsonify(result)
-
-    @staticmethod
     def get_book_class():
         # 根据书籍分类来获取书籍
         try:
